@@ -1,0 +1,1144 @@
+:root {
+
+    --ink: #251821;
+    --wine: #4a2138;
+    --plum: #291725;
+    --gold: #d3a85b;
+    --champagne: #f4e3bc;
+    --paper: #fffaf0;
+    --cream: #f7efe1;
+    --muted: #806f78;
+    --line: rgba(79, 45, 62, .18);
+
+    --ease: cubic-bezier(.22, 1, .36, 1);
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+
+    margin: 0;
+
+    background: #21141f;
+
+    color: var(--ink);
+
+    font-family:
+        Inter,
+        system-ui,
+        sans-serif;
+}
+
+
+/* =========================
+   MAIN BACKGROUND
+========================= */
+
+#app {
+
+    min-height: 100vh;
+
+    background:
+
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(183, 123, 76, .18),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 85% 15%,
+            rgba(143, 70, 103, .24),
+            transparent 28%
+        ),
+
+        linear-gradient(
+            135deg,
+            #21141f,
+            #3a2030 55%,
+            #171018
+        );
+
+    overflow: hidden;
+}
+
+
+.container {
+
+    width: min(1160px, 94%);
+
+    margin: auto;
+
+    padding: 28px 0 60px;
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+
+    color: white;
+}
+
+
+.brand {
+
+    font-weight: 850;
+
+    letter-spacing: -.04em;
+
+    font-size: 21px;
+}
+
+
+.pill {
+
+    padding: 8px 14px;
+
+    border:
+        1px solid
+        rgba(244, 227, 188, .25);
+
+    background:
+        rgba(255, 255, 255, .07);
+
+    border-radius: 999px;
+
+    color: #e9d8bc;
+
+    font-size: 12px;
+
+    backdrop-filter: blur(14px);
+}
+
+
+/* =========================
+   BOOK
+========================= */
+
+.book-wrap {
+
+    perspective: 2200px;
+
+    position: relative;
+
+    padding: 15px 0 30px;
+}
+
+
+.book {
+
+    position: relative;
+
+    width: min(1080px, 100%);
+
+    height: min(720px, 70vh);
+
+    min-height: 560px;
+
+    margin: auto;
+
+    transform-style: preserve-3d;
+
+    filter:
+        drop-shadow(
+            0 40px 60px rgba(0, 0, 0, .38)
+        );
+
+    perspective: 2400px;
+}
+
+
+/* =========================
+   BOOK SPINE
+========================= */
+
+.book::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: -10px;
+
+    top: 10px;
+
+    bottom: 10px;
+
+    width: 20px;
+
+    border-radius:
+        10px 0 0 10px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #5d2b40,
+            #d3a85b 45%,
+            #6d354b
+        );
+
+    box-shadow:
+
+        inset
+        3px 0 5px
+        rgba(255, 255, 255, .18),
+
+        0 0 20px
+        rgba(0, 0, 0, .28);
+
+    z-index: 0;
+
+    transform:
+        translateZ(-18px);
+}
+
+
+/* =========================
+   PAGES
+========================= */
+
+.page {
+
+    position: absolute;
+
+    inset: 0;
+
+    background: var(--paper);
+
+    border-radius:
+        8px 20px 20px 8px;
+
+    box-shadow:
+
+        inset
+        0 0 0 1px
+        rgba(116, 78, 43, .16),
+
+        inset
+        22px 0 35px
+        rgba(73, 38, 43, .06);
+
+    overflow: hidden;
+
+    transform-origin: left center;
+
+    transform-style: preserve-3d;
+
+    backface-visibility: hidden;
+
+    transition:
+
+        transform
+        1.25s
+        cubic-bezier(.2, .75, .2, 1),
+
+        box-shadow
+        1.25s ease;
+
+    will-change: transform;
+
+    z-index: var(--z);
+}
+
+
+.page::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 15px;
+
+    border:
+        1px solid
+        rgba(181, 139, 72, .25);
+
+    border-radius: 4px;
+
+    pointer-events: none;
+}
+
+
+.page.flipped {
+
+    transform:
+        rotateY(-180deg);
+
+    box-shadow:
+
+        inset
+        0 0 0
+        rgba(0, 0, 0, 0),
+
+        -20px 0 32px
+        rgba(49, 25, 35, .16);
+}
+
+
+/* =========================
+   PAGE CONTENT
+========================= */
+
+.page-inner {
+
+    height: 100%;
+
+    padding:
+        58px
+        clamp(28px, 6vw, 82px);
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    position: relative;
+}
+
+
+.page-number {
+
+    position: absolute;
+
+    bottom: 26px;
+
+    right: 38px;
+
+    color: #a58b70;
+
+    font:
+        12px
+        Georgia,
+        serif;
+}
+
+
+.chapter {
+
+    color: #a77c3e;
+
+    text-transform: uppercase;
+
+    letter-spacing: .3em;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+.page h1,
+.page h2 {
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-weight: 500;
+
+    letter-spacing: -.045em;
+}
+
+
+.page h1 {
+
+    font-size:
+        clamp(44px, 7vw, 82px);
+
+    line-height: .98;
+
+    margin: 18px 0;
+}
+
+
+.page h2 {
+
+    font-size:
+        clamp(34px, 5vw, 58px);
+
+    margin: 12px 0;
+}
+
+
+.page p {
+
+    font-family:
+        Georgia,
+        serif;
+
+    color: #685961;
+
+    font-size: 18px;
+
+    line-height: 1.85;
+
+    max-width: 720px;
+}
+
+
+/* =========================
+   COVER
+========================= */
+
+.cover {
+
+    background:
+
+        radial-gradient(
+            circle at 75% 20%,
+            rgba(210, 171, 92, .24),
+            transparent 28%
+        ),
+
+        linear-gradient(
+            135deg,
+            #fff9ed,
+            #f0dfd1 55%,
+            #e7c4ce
+        );
+}
+
+
+.cover .page-inner {
+
+    text-align: center;
+
+    align-items: center;
+}
+
+
+.cover-mark {
+
+    width: 90px;
+
+    height: 90px;
+
+    border-radius: 50%;
+
+    display: grid;
+
+    place-items: center;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            #fff7dc,
+            #cda15b
+        );
+
+    box-shadow:
+
+        0 18px 40px
+        rgba(112, 69, 54, .18);
+
+    font-size: 42px;
+
+    margin-bottom: 18px;
+
+    animation:
+        float 3s ease-in-out infinite,
+        glow 3s ease-in-out infinite;
+}
+
+
+.cover h1 {
+
+    font-size:
+        clamp(58px, 10vw, 112px);
+
+    margin: 12px 0;
+
+    background:
+
+        linear-gradient(
+            110deg,
+            #5a2944,
+            #bd8c48,
+            #6b3852
+        );
+
+    -webkit-background-clip: text;
+
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+.cover .subtitle {
+
+    font-family:
+        Inter,
+        sans-serif;
+
+    color: #715c65;
+
+    letter-spacing: .13em;
+
+    text-transform: uppercase;
+
+    font-size: 11px;
+
+    font-weight: 750;
+}
+
+
+.gold-rule {
+
+    width: 120px;
+
+    height: 1px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+
+    margin: 25px auto;
+}
+
+
+.cover small {
+
+    color: #866f70;
+
+    letter-spacing: .08em;
+}
+
+
+/* =========================
+   PERSON PAGE
+========================= */
+
+.person-page {
+
+    background:
+
+        linear-gradient(
+            120deg,
+            #fffaf1,
+            #f4e7dc
+        );
+}
+
+
+.person-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 55px;
+
+    align-items: center;
+
+    height: 100%;
+}
+
+
+.person-photo {
+
+    height: 390px;
+
+    border-radius: 12px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            #d8b5a8,
+            #efe1c8 50%,
+            #a96f7e
+        );
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 90px;
+
+    box-shadow:
+
+        18px 22px 45px
+        rgba(73, 40, 49, .18);
+
+    border:
+        7px solid
+        rgba(255, 255, 255, .65);
+
+    outline:
+        1px solid
+        rgba(182, 139, 73, .3);
+
+    position: relative;
+
+    overflow: hidden;
+
+    animation:
+        glow 4s ease-in-out infinite;
+}
+
+
+.person-photo::before {
+
+    content: "SITARE 30";
+
+    position: absolute;
+
+    bottom: 16px;
+
+    left: 0;
+
+    right: 0;
+
+    text-align: center;
+
+    color:
+        rgba(255, 255, 255, .78);
+
+    font-size: 10px;
+
+    letter-spacing: .3em;
+
+    font-weight: 800;
+}
+
+
+.quote {
+
+    font-size: 22px !important;
+
+    color: #3d2935 !important;
+
+    margin-top: 25px !important;
+}
+
+
+.from {
+
+    color: #aa7b37;
+
+    font:
+        700 12px
+        Inter,
+        sans-serif;
+
+    letter-spacing: .08em;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 20px;
+}
+
+
+.nav-btn {
+
+    border:
+        1px solid
+        rgba(244, 227, 188, .28);
+
+    background:
+        rgba(255, 255, 255, .08);
+
+    color: white;
+
+    border-radius: 999px;
+
+    padding: 13px 20px;
+
+    cursor: pointer;
+
+    font-weight: 750;
+
+    backdrop-filter: blur(12px);
+
+    transition: .25s;
+}
+
+
+.nav-btn:hover {
+
+    background:
+        rgba(211, 168, 91, .18);
+
+    border-color:
+        rgba(211, 168, 91, .6);
+
+    transform:
+        translateY(-2px);
+}
+
+
+.progress {
+
+    color: #d9c6ac;
+
+    font-size: 12px;
+
+    letter-spacing: .12em;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(25, 14, 22, .78);
+
+    display: none;
+
+    place-items: center;
+
+    padding: 20px;
+
+    z-index: 20;
+}
+
+
+.modal.open {
+
+    display: grid;
+}
+
+
+.modal-card {
+
+    width:
+        min(520px, 100%);
+
+    background:
+        #fffaf0;
+
+    border-radius: 18px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 30px 90px #0008;
+}
+
+
+.modal-card h2 {
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-weight: 500;
+}
+
+
+.field {
+
+    margin: 14px 0;
+}
+
+
+.field label {
+
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 750;
+
+    margin-bottom: 7px;
+}
+
+
+.field input,
+.field textarea {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border-radius: 10px;
+
+    border:
+        1px solid
+        var(--line);
+
+    background:
+        #fffdf8;
+
+    color: var(--ink);
+
+    font: inherit;
+}
+
+
+.field textarea {
+
+    min-height: 110px;
+
+    resize: vertical;
+}
+
+
+.close {
+
+    float: right;
+
+    border: 0;
+
+    background: none;
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+    color: var(--muted);
+}
+
+
+.primary {
+
+    border: 0;
+
+    border-radius: 999px;
+
+    padding: 14px 23px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #54243e,
+            #9a5d70 55%,
+            #c49a55
+        );
+
+    color: white;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 12px 28px #54243e44;
+}
+
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes coverIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            rotateY(-28deg)
+            translateY(25px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: none;
+    }
+}
+
+
+@keyframes float {
+
+    50% {
+
+        transform:
+            translateY(-9px);
+    }
+}
+
+
+@keyframes glow {
+
+    50% {
+
+        box-shadow:
+            0 0 45px
+            rgba(211, 168, 91, .22);
+    }
+}
+
+
+@keyframes pageReveal {
+
+    from {
+
+        opacity: .35;
+
+        transform:
+            rotateY(-10deg)
+            translateX(12px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            rotateY(0)
+            translateX(0);
+    }
+}
+
+
+.page:not(.flipped) {
+
+    animation:
+        pageReveal
+        .8s
+        cubic-bezier(.22, 1, .36, 1)
+        both;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 760px) {
+
+    .container {
+
+        padding-top: 18px;
+    }
+
+
+    .pill {
+
+        display: none;
+    }
+
+
+    .book {
+
+        height: 650px;
+
+        min-height: 650px;
+    }
+
+
+    .book::before {
+
+        left: -5px;
+
+        width: 10px;
+    }
+
+
+    .page {
+
+        transition-duration: 1s;
+    }
+
+
+    .page-inner {
+
+        padding:
+            40px 28px;
+    }
+
+
+    .person-layout {
+
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+
+        text-align: center;
+    }
+
+
+    .person-photo {
+
+        height: 260px;
+
+        font-size: 70px;
+    }
+
+
+    .person-layout p {
+
+        margin-left: auto;
+
+        margin-right: auto;
+    }
+
+
+    .person-page .page-inner {
+
+        overflow: auto;
+    }
+
+
+    .page h1 {
+
+        font-size: 52px;
+    }
+
+
+    .page h2 {
+
+        font-size: 38px;
+    }
+
+
+    .controls {
+
+        margin-top: 14px;
+    }
+}
+
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation: none !important;
+
+        transition: none !important;
+    }
+}
+
+/* =========================
+   WISH PHOTO UPLOAD
+========================= */
+
+.field label span {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+
+.upload-note {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+
+#photo {
+    cursor: pointer;
+
+    padding: 10px !important;
+
+    background: #fffdf8;
+}
+
+
+/* =========================
+   USER WISH PHOTO
+========================= */
+
+.wish-photo {
+    width: 100%;
+
+    height: 390px;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+
+    border: 7px solid
+        rgba(255, 255, 255, .65);
+
+    outline: 1px solid
+        rgba(182, 139, 73, .3);
+
+    box-shadow:
+        18px 22px 45px
+        rgba(73, 40, 49, .18);
+
+    display: block;
+
+    animation:
+        glow 4s ease-in-out infinite;
+}
+
+
+.primary:disabled {
+    opacity: .65;
+
+    cursor: wait;
+
+    transform: none;
+}
+
+
+/* =========================
+   MOBILE PHOTO
+========================= */
+
+@media (max-width: 760px) {
+
+    .wish-photo {
+        height: 260px;
+    }
+
+}

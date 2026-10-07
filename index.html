@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SITARE 30 — Birthday Archive</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<div id="app">
+
+    <main class="container">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="brand">SITARE 30</div>
+
+            <div class="pill">
+                THE PRIVATE BIRTHDAY ARCHIVE • BATCH OF 2030
+            </div>
+        </header>
+
+
+        <!-- BOOK -->
+        <div class="book-wrap">
+
+            <div class="book" id="book">
+
+                <!-- PAGE 1 : COVER -->
+                <section class="page cover" style="--z:6">
+
+                    <div class="page-inner">
+
+                        <div class="cover-mark">
+                            🎂
+                        </div>
+
+                        <div class="chapter">
+                            SITARE UNIVERSITY • 2030
+                        </div>
+
+                        <h1>
+                            Happy Birthday,<br>
+                            Ananya
+                        </h1>
+
+                        <div class="gold-rule"></div>
+
+                        <div class="subtitle">
+                            A little book of wishes, photographs & memories
+                        </div>
+
+                        <p>
+                            Today is your page in our story.
+                        </p>
+
+                        <small>
+                            Open the book →
+                        </small>
+
+                    </div>
+
+                    <div class="page-number">
+                        01
+                    </div>
+
+                </section>
+
+
+                <!-- PAGE 2 : RAHUL -->
+                <section class="page person-page" style="--z:5">
+
+                    <div class="page-inner">
+
+                        <div class="person-layout">
+
+                            <div class="person-photo">
+                                📸
+                            </div>
+
+                            <div>
+
+                                <div class="chapter">
+                                    A NOTE FROM RAHUL
+                                </div>
+
+                                <h2>
+                                    For Ananya
+                                </h2>
+
+                                <p class="quote">
+                                    “Happy Birthday! Keep smiling, keep winning,
+                                    and keep making the ordinary days feel special.
+                                    Here’s to another year of memories together.”
+                                </p>
+
+                                <div class="from">
+                                    Rahul • Classmate
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="page-number">
+                        02
+                    </div>
+
+                </section>
+
+
+                <!-- PAGE 3 : PRIYA -->
+                <section class="page person-page" style="--z:4">
+
+                    <div class="page-inner">
+
+                        <div class="person-layout">
+
+                            <div>
+
+                                <div class="chapter">
+                                    A NOTE FROM PRIYA
+                                </div>
+
+                                <h2>
+                                    One more year,<br>
+                                    one more story.
+                                </h2>
+
+                                <p class="quote">
+                                    “Wishing you happiness, success and countless
+                                    moments that make you stop and smile.
+                                    Save some memories for the class archive too! ✨”
+                                </p>
+
+                                <div class="from">
+                                    Priya • Classmate
+                                </div>
+
+                            </div>
+
+                            <div class="person-photo">
+                                🌸
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="page-number">
+                        03
+                    </div>
+
+                </section>
+
+
+                <!-- PAGE 4 : ARJUN -->
+                <section class="page person-page" style="--z:3">
+
+                    <div class="page-inner">
+
+                        <div class="person-layout">
+
+                            <div class="person-photo">
+                                🎉
+                            </div>
+
+                            <div>
+
+                                <div class="chapter">
+                                    A NOTE FROM ARJUN
+                                </div>
+
+                                <h2>
+                                    Make it unforgettable.
+                                </h2>
+
+                                <p class="quote">
+                                    “Many many happy returns! Hope this year brings
+                                    you adventures, great people and the kind of
+                                    memories we’ll still laugh about in final year.”
+                                </p>
+
+                                <div class="from">
+                                    Arjun • Classmate
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="page-number">
+                        04
+                    </div>
+
+                </section>
+
+
+                <!-- PAGE 5 : NEHA -->
+                <section class="page person-page" style="--z:2">
+
+                    <div class="page-inner">
+
+                        <div class="person-layout">
+
+                            <div>
+
+                                <div class="chapter">
+                                    A NOTE FROM NEHA
+                                </div>
+
+                                <h2>
+                                    For the memories.
+                                </h2>
+
+                                <p class="quote">
+                                    “Happy Birthday! This is just one little page
+                                    today — imagine how many pages we’ll have filled
+                                    by the time Batch 2030 graduates.” 💜
+                                </p>
+
+                                <div class="from">
+                                    Neha • Classmate
+                                </div>
+
+                            </div>
+
+                            <div class="person-photo">
+                                💐
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="page-number">
+                        05
+                    </div>
+
+                </section>
+
+
+                <!-- PAGE 6 : END -->
+                <section class="page cover" style="--z:1">
+
+                    <div class="page-inner">
+
+                        <div class="cover-mark">
+                            ♡
+                        </div>
+
+                        <div class="chapter">
+                            THE STORY CONTINUES
+                        </div>
+
+                        <h2>
+                            Keep the memories.
+                        </h2>
+
+                        <p>
+                            Every birthday, every photograph and every little
+                            message becomes another page in the SITARE 30 story.
+                        </p>
+
+                        <div class="gold-rule"></div>
+
+                        <button
+                            class="primary"
+                            onclick="openModal()"
+                        >
+                            💌 Add Your Wish
+                        </button>
+
+                        <small style="margin-top:20px">
+                            2026 — 2029 • Our class, our archive.
+                        </small>
+
+                    </div>
+
+                    <div class="page-number">
+                        06
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTROLS -->
+        <div class="controls">
+
+            <button
+                class="nav-btn"
+                onclick="prevPage()"
+            >
+                ← Previous
+            </button>
+
+            <div
+                class="progress"
+                id="progress"
+            >
+                COVER • 1 / 6
+            </div>
+
+            <button
+                class="nav-btn"
+                onclick="nextPage()"
+            >
+                Next →
+            </button>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- ADD WISH MODAL -->
+<div
+    class="modal"
+    id="modal"
+>
+
+    <div class="modal-card">
+
+        <button
+            class="close"
+            onclick="closeModal()"
+        >
+            ×
+        </button>
+
+        <h2>
+            💌 Add a page to the archive
+        </h2>
+
+
+        <div class="field">
+
+            <label>
+                Your name
+            </label>
+
+            <input
+                id="name"
+                placeholder="e.g. Rahul"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Your message
+            </label>
+
+            <textarea
+                id="message"
+                placeholder="Write something beautiful..."
+            ></textarea>
+
+        </div>
+
+        <div class="field">
+
+    <label>
+        Your photo <span>(optional)</span>
+    </label>
+
+    <input
+        type="file"
+        id="photo"
+        accept="image/*"
+    >
+
+    <small class="upload-note">
+        Add a photo to make your page more personal ✨
+    </small>
+
+</div>
+
+
+        <button
+            class="primary"
+            onclick="addWish()"
+        >
+            Add to the book ✨
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
