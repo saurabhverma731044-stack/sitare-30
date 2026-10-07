@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>SITARE 30 — Birthday Archive</title>
 
-    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -16,23 +18,48 @@
 
     <main class="container">
 
-        <!-- TOP BAR -->
-        <header class="topbar">
-            <div class="brand">SITARE 30</div>
+        <!-- =========================
+             TOP BAR
+        ========================== -->
 
-            <div class="pill">
-                THE PRIVATE BIRTHDAY ARCHIVE • BATCH OF 2030
+        <header class="topbar">
+
+            <div class="brand">
+                SITARE 30
             </div>
+
+            <div class="top-actions">
+
+                <div class="pill">
+                    THE PRIVATE BIRTHDAY ARCHIVE • BATCH OF 2030
+                </div>
+
+                <button
+                    class="admin-btn"
+                    onclick="openAdminLogin()"
+                >
+                    🔐 Admin
+                </button>
+
+            </div>
+
         </header>
 
 
-        <!-- BOOK -->
+        <!-- =========================
+             BOOK
+        ========================== -->
+
         <div class="book-wrap">
 
             <div class="book" id="book">
 
-                <!-- PAGE 1 : COVER -->
-                <section class="page cover" style="--z:6">
+                <!-- COVER -->
+
+                <section
+                    class="page cover"
+                    style="--z:6"
+                >
 
                     <div class="page-inner">
 
@@ -52,7 +79,8 @@
                         <div class="gold-rule"></div>
 
                         <div class="subtitle">
-                            A little book of wishes, photographs & memories
+                            A little book of wishes,
+                            photographs & memories
                         </div>
 
                         <p>
@@ -72,8 +100,12 @@
                 </section>
 
 
-                <!-- PAGE 2 : RAHUL -->
-                <section class="page person-page" style="--z:5">
+                <!-- STATIC PAGE 1 -->
+
+                <section
+                    class="page person-page"
+                    style="--z:5"
+                >
 
                     <div class="page-inner">
 
@@ -86,38 +118,43 @@
                             <div>
 
                                 <div class="chapter">
-                                    A NOTE FROM Saurabh Verma
+                                    A NOTE FROM SAURABH VERMA
                                 </div>
 
                                 <h2>
-                                    For Kalpana, the brightest star in our batch.
+                                    For Kalpana
                                 </h2>
 
                                 <p class="quote">
-                                    “Happy Birthday! Keep smiling, keep winning,
-                                    and keep making the ordinary days feel special.
+                                    “Happy Birthday! Keep smiling,
+                                    keep winning, and keep making
+                                    the ordinary days feel special.
                                     Here’s to another year of memories together.”
                                 </p>
 
                                 <div class="from">
-                                    Saurabh Verma • Classmate
+                                    SAURABH • Classmate
                                 </div>
 
                             </div>
 
                         </div>
 
-                    </div>
+                        <div class="page-number">
+                            02
+                        </div>
 
-                    <div class="page-number">
-                        02
                     </div>
 
                 </section>
 
 
-                <!-- PAGE 3 : PRIYA -->
-                <section class="page person-page" style="--z:4">
+                <!-- STATIC PAGE 2 -->
+
+                <section
+                    class="page person-page"
+                    style="--z:4"
+                >
 
                     <div class="page-inner">
 
@@ -126,7 +163,7 @@
                             <div>
 
                                 <div class="chapter">
-                                    A NOTE FROM Raunak
+                                    A NOTE FROM RAUNAK
                                 </div>
 
                                 <h2>
@@ -135,13 +172,14 @@
                                 </h2>
 
                                 <p class="quote">
-                                    “Wishing you happiness, success and countless
-                                    moments that make you stop and smile.
+                                    “Wishing you happiness,
+                                    success and countless moments
+                                    that make you stop and smile.
                                     Save some memories for the class archive too! ✨”
                                 </p>
 
                                 <div class="from">
-                                    Raunak • Classmate
+                                    RAUNAK • Classmate
                                 </div>
 
                             </div>
@@ -152,17 +190,21 @@
 
                         </div>
 
-                    </div>
+                        <div class="page-number">
+                            03
+                        </div>
 
-                    <div class="page-number">
-                        03
                     </div>
 
                 </section>
 
 
-                <!-- PAGE 4 : Sakshi Nagar -->
-                <section class="page person-page" style="--z:3">
+                <!-- STATIC PAGE 3 -->
+
+                <section
+                    class="page person-page"
+                    style="--z:3"
+                >
 
                     <div class="page-inner">
 
@@ -175,7 +217,7 @@
                             <div>
 
                                 <div class="chapter">
-                                    A NOTE FROM SAKSHI NAGAR
+                                    A NOTE FROM SAKSHI
                                 </div>
 
                                 <h2>
@@ -183,30 +225,35 @@
                                 </h2>
 
                                 <p class="quote">
-                                    “Many many happy returns! Hope this year brings
-                                    you adventures, great people and the kind of
-                                    memories we’ll still laugh about in final year.”
+                                    “Many many happy returns!
+                                    Hope this year brings you adventures,
+                                    great people and the kind of memories
+                                    we’ll still laugh about in final year.”
                                 </p>
 
                                 <div class="from">
-                                    Sakshi Nagar • Classmate
+                                    SAKSHI • Friend
                                 </div>
 
                             </div>
 
                         </div>
 
-                    </div>
+                        <div class="page-number">
+                            04
+                        </div>
 
-                    <div class="page-number">
-                        04
                     </div>
 
                 </section>
 
 
-                <!-- PAGE 5 : ANSHU  -->
-                <section class="page person-page" style="--z:2">
+                <!-- STATIC PAGE 4 -->
+
+                <section
+                    class="page person-page"
+                    style="--z:2"
+                >
 
                     <div class="page-inner">
 
@@ -223,13 +270,14 @@
                                 </h2>
 
                                 <p class="quote">
-                                    “Happy Birthday! This is just one little page
-                                    today — imagine how many pages we’ll have filled
-                                    by the time Batch 2030 graduates.” 💜
+                                    “Happy Birthday!
+                                    This is just one little page today —
+                                    imagine how many pages we’ll have
+                                    filled by the time Batch 2030 graduates.” 💜
                                 </p>
 
                                 <div class="from">
-                                    ANSHU • Classmate
+                                    ANSHU • Friend
                                 </div>
 
                             </div>
@@ -240,17 +288,21 @@
 
                         </div>
 
-                    </div>
+                        <div class="page-number">
+                            05
+                        </div>
 
-                    <div class="page-number">
-                        05
                     </div>
 
                 </section>
 
 
-                <!-- PAGE 6 : END -->
-                <section class="page cover" style="--z:1">
+                <!-- FINAL PAGE -->
+
+                <section
+                    class="page cover"
+                    style="--z:1"
+                >
 
                     <div class="page-inner">
 
@@ -267,8 +319,9 @@
                         </h2>
 
                         <p>
-                            Every birthday, every photograph and every little
-                            message becomes another page in the SITARE 30 story.
+                            Every birthday, every photograph
+                            and every little message becomes
+                            another page in the SITARE 30 story.
                         </p>
 
                         <div class="gold-rule"></div>
@@ -297,7 +350,10 @@
         </div>
 
 
-        <!-- CONTROLS -->
+        <!-- =========================
+             NAVIGATION
+        ========================== -->
+
         <div class="controls">
 
             <button
@@ -328,7 +384,10 @@
 </div>
 
 
-<!-- ADD WISH MODAL -->
+<!-- =========================
+     ADD WISH MODAL
+========================== -->
+
 <div
     class="modal"
     id="modal"
@@ -343,9 +402,19 @@
             ×
         </button>
 
+        <div class="chapter">
+            SITARE 30 • MEMORY ARCHIVE
+        </div>
+
         <h2>
-            💌 Add a page to the archive
+            💌 Write your own page
         </h2>
+
+        <p class="modal-intro">
+            Anyone from the class can leave a birthday message.
+            Write it yourself and it will appear as a new page
+            in the book.
+        </p>
 
 
         <div class="field">
@@ -357,6 +426,7 @@
             <input
                 id="name"
                 placeholder="e.g. Rahul"
+                autocomplete="name"
             >
 
         </div>
@@ -375,30 +445,194 @@
 
         </div>
 
+
         <div class="field">
 
-    <label>
-        Your photo <span>(optional)</span>
-    </label>
+            <label>
+                Your photo
+                <span>(optional)</span>
+            </label>
 
-    <input
-        type="file"
-        id="photo"
-        accept="image/*"
-    >
+            <input
+                type="file"
+                id="photo"
+                accept="image/*"
+            >
 
-    <small class="upload-note">
-        Add a photo to make your page more personal ✨
-    </small>
-
-</div>
+        </div>
 
 
         <button
             class="primary"
             onclick="addWish()"
         >
-            Add to the book ✨
+            Add My Page to the Book ✨
+        </button>
+
+
+        <button
+            type="button"
+            class="delete-link"
+            onclick="openDeleteModal()"
+        >
+            🗑️ Delete my wish
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     PERSONAL DELETE MODAL
+========================== -->
+
+<div
+    class="modal"
+    id="deleteModal"
+>
+
+    <div class="modal-card">
+
+        <button
+            class="close"
+            onclick="closeDeleteModal()"
+        >
+            ×
+        </button>
+
+        <div class="chapter">
+            SITARE 30 • PERSONAL DELETE
+        </div>
+
+        <h2>
+            🗑️ Delete your page
+        </h2>
+
+        <p>
+            Enter the private delete code you received
+            when you submitted your wish.
+        </p>
+
+        <div class="field">
+
+            <label>
+                Your private delete code
+            </label>
+
+            <input
+                id="deleteCode"
+                type="text"
+                placeholder="Paste your delete code"
+            >
+
+        </div>
+
+        <button
+            class="primary"
+            onclick="deleteWish()"
+        >
+            Delete My Page
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     ADMIN LOGIN MODAL
+========================== -->
+
+<div
+    class="modal"
+    id="adminModal"
+>
+
+    <div class="modal-card">
+
+        <button
+            class="close"
+            onclick="closeAdminLogin()"
+        >
+            ×
+        </button>
+
+        <div class="chapter">
+            SITARE 30 • ADMIN ACCESS
+        </div>
+
+        <h2>
+            🔐 Admin Control
+        </h2>
+
+        <p>
+            Enter the private admin code to enable
+            deletion controls for the archive.
+        </p>
+
+        <div class="field">
+
+            <label>
+                Admin code
+            </label>
+
+            <input
+                id="adminCode"
+                type="password"
+                placeholder="Enter admin code"
+            >
+
+        </div>
+
+        <button
+            class="primary"
+            onclick="loginAdmin()"
+        >
+            Unlock Admin Controls
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     ADMIN DELETE MODAL
+========================== -->
+
+<div
+    class="modal"
+    id="adminDeleteModal"
+>
+
+    <div class="modal-card">
+
+        <button
+            class="close"
+            onclick="closeAdminDeleteModal()"
+        >
+            ×
+        </button>
+
+        <div class="chapter">
+            SITARE 30 • ADMIN CONTROL
+        </div>
+
+        <h2>
+            🗑️ Delete this page?
+        </h2>
+
+        <p id="adminDeleteText">
+            This page will be permanently removed
+            from the birthday archive.
+        </p>
+
+        <button
+            class="danger-button"
+            onclick="confirmAdminDelete()"
+        >
+            Permanently Delete
         </button>
 
     </div>
