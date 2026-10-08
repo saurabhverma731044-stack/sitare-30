@@ -908,6 +908,8 @@ body.admin-mode .admin-status {
 
 }
 
+
+/* Desktop page reveal */
 .page:not(.flipped) {
     animation:
         pageReveal
@@ -930,12 +932,24 @@ body.admin-mode .admin-status {
 
 /* =========================
    MOBILE
+   FIXED — NO HOVERING
 ========================== */
 
 @media(max-width:760px) {
 
     .container {
+        width: 94%;
         padding-top: 18px;
+        padding-bottom: 35px;
+        overflow: hidden;
+    }
+
+    .topbar {
+        margin-bottom: 12px;
+    }
+
+    .brand {
+        font-size: 18px;
     }
 
     .pill {
@@ -948,37 +962,175 @@ body.admin-mode .admin-status {
 
     .admin-btn {
         padding: 7px 11px;
+        font-size: 11px;
+    }
+
+
+    /* =====================
+       STABLE MOBILE BOOK
+    ====================== */
+
+    .book-wrap {
+        perspective: 1600px;
+        padding: 8px 0 18px;
+        overflow: visible;
     }
 
     .book {
+        width: 100%;
         height: 650px;
         min-height: 650px;
+
+        /* Remove physical floating movement */
+        transform: none;
+
+        /* Keep page turning */
+        transform-style: preserve-3d;
+
+        filter:
+            drop-shadow(
+                0 22px 35px rgba(0,0,0,.30)
+            );
+
+        touch-action: pan-y;
     }
 
     .book:before {
         left: -5px;
         width: 10px;
+
+        top: 10px;
+        bottom: 10px;
+
+        transform:
+            translateZ(-18px);
     }
 
+
+    /* =====================
+       PAGE TURNING
+    ====================== */
+
     .page {
-        transition-duration: 1s;
+        transform-style: preserve-3d;
+
+        transition:
+            transform .8s cubic-bezier(.2,.75,.2,1),
+            box-shadow .8s ease;
+
+        will-change: transform;
     }
+
+    .page.flipped {
+        transform: rotateY(-180deg);
+    }
+
+
+    /* Remove the page-reveal
+       animation causing hovering */
+    .page:not(.flipped) {
+        animation: none !important;
+    }
+
+
+    /* =====================
+       PAGE CONTENT
+    ====================== */
 
     .page-inner {
         padding: 40px 28px;
     }
 
+    .page:after {
+        inset: 10px;
+    }
+
+    .page-number {
+        bottom: 18px;
+        right: 25px;
+        font-size: 10px;
+    }
+
+    .chapter {
+        font-size: 9px;
+        letter-spacing: .22em;
+    }
+
+    .page h1 {
+        font-size: 52px;
+        line-height: 1;
+    }
+
+    .page h2 {
+        font-size: 38px;
+        line-height: 1.05;
+    }
+
+    .page p {
+        font-size: 16px;
+        line-height: 1.7;
+    }
+
+
+    /* =====================
+       COVER
+    ====================== */
+
+    .cover-mark {
+        width: 76px;
+        height: 76px;
+        font-size: 34px;
+
+        /* No floating movement */
+        animation:
+            glow 3s ease-in-out infinite;
+    }
+
+    .cover h1 {
+        font-size: 52px;
+    }
+
+    .cover .subtitle {
+        font-size: 9px;
+        letter-spacing: .1em;
+        line-height: 1.6;
+        max-width: 280px;
+    }
+
+    .gold-rule {
+        width: 90px;
+        margin: 18px auto;
+    }
+
+
+    /* =====================
+       PERSON PAGES
+    ====================== */
+
     .person-layout {
         grid-template-columns: 1fr;
-
         gap: 18px;
-
         text-align: center;
+
+        height: auto;
+        min-height: 100%;
+    }
+
+    .person-layout > div {
+        width: 100%;
     }
 
     .person-photo,
     .wish-photo {
+        width: 100%;
         height: 260px;
+    }
+
+    /* Remove glowing/floating photo
+       animation on mobile */
+    .person-photo {
+        animation: none !important;
+        font-size: 70px;
     }
 
     .person-layout p {
@@ -987,19 +1139,108 @@ body.admin-mode .admin-status {
     }
 
     .person-page .page-inner {
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
+        justify-content: center;
     }
 
-    .page h1 {
-        font-size: 52px;
+    .quote {
+        font-size: 18px !important;
+        line-height: 1.65 !important;
+        margin-top: 18px !important;
     }
 
-    .page h2 {
-        font-size: 38px;
+    .from {
+        font-size: 10px;
+        margin-top: 10px;
     }
+
+
+    /* =====================
+       CONTROLS
+    ====================== */
 
     .controls {
         margin-top: 14px;
+        gap: 7px;
+    }
+
+    .nav-btn {
+        padding: 10px 14px;
+        font-size: 12px;
+    }
+
+    .progress {
+        font-size: 9px;
+        letter-spacing: .08em;
+    }
+
+
+    /* =====================
+       MODALS
+    ====================== */
+
+    .modal {
+        padding: 14px;
+    }
+
+    .modal-card {
+        width: 100%;
+        max-height: 88vh;
+        padding: 24px 20px;
+        border-radius: 16px;
+    }
+
+    .modal-card h2 {
+        font-size: 28px;
+    }
+
+    .field input,
+    .field textarea {
+        font-size: 16px;
+    }
+
+    .primary {
+        padding: 13px 18px;
+    }
+}
+
+
+/* =========================
+   VERY SMALL PHONES
+========================== */
+
+@media(max-width:400px) {
+
+    .book {
+        height: 610px;
+        min-height: 610px;
+    }
+
+    .page-inner {
+        padding: 34px 22px;
+    }
+
+    .page h1,
+    .cover h1 {
+        font-size: 45px;
+    }
+
+    .page h2 {
+        font-size: 32px;
+    }
+
+    .person-photo,
+    .wish-photo {
+        height: 220px;
+    }
+
+    .quote {
+        font-size: 16px !important;
+    }
+
+    .nav-btn {
+        padding: 9px 11px;
     }
 
 }
