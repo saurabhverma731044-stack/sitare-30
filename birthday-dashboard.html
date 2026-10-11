@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Dashboard | SITARE 30</title>
+  <meta name="theme-color" content="#241622">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --bg: #21141f;
+      --panel: #30202e;
+      --wine: #54243e;
+      --gold: #d3a85b;
+      --cream: #fff8ed;
+      --muted: #bcaab8;
+      --line: rgba(255,255,255,.1);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--cream);
+      background:
+        radial-gradient(circle at 10% 0%, #65344955, transparent 35%),
+        radial-gradient(circle at 95% 10%, #a77c3e30, transparent 28%),
+        var(--bg);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    button { font: inherit; }
+
+    .shell {
+      width: min(1160px, 92%);
+      margin: auto;
+      padding: 28px 0 55px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 34px;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -.8px;
+    }
+
+    .brand span { color: var(--gold); }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tag {
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .btn {
+      padding: 11px 16px;
+      border-radius: 11px;
+      border: 1px solid var(--line);
+      background: #ffffff0b;
+      color: var(--cream);
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .btn:hover {
+      border-color: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(25px, 5vw, 52px);
+      border: 1px solid #d3a85b38;
+      border-radius: 25px;
+      background: linear-gradient(125deg, #613449, #382334 60%, #29202c);
+      box-shadow: 0 25px 70px #0002;
+    }
+
+    .hero:after {
+      content: "✦";
+      position: absolute;
+      right: 7%;
+      top: 8%;
+      color: #d3a85b35;
+      font-size: clamp(100px, 20vw, 220px);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    .hero h1 {
+      max-width: 750px;
+      margin: 16px 0;
+      font: 500 clamp(38px, 6vw, 68px)/1.05 Georgia, serif;
+      overflow-wrap: anywhere;
+    }
+
+    .hero p {
+      max-width: 600px;
+      color: #e4d5dd;
+      line-height: 1.8;
+      margin-bottom: 0;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 22px 0 38px;
+    }
+
+    .stat, .panel {
+      border: 1px solid var(--line);
+      background: #ffffff07;
+      border-radius: 18px;
+    }
+
+    .stat { padding: 22px; }
+
+    .stat .label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stat .number {
+      display: block;
+      margin-top: 12px;
+      color: var(--gold);
+      font: 500 36px Georgia, serif;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .section-heading h2 {
+      margin-bottom: 7px;
+      font: 500 clamp(26px, 4vw, 36px) Georgia, serif;
+    }
+
+    .section-heading p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .wish-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .wish-card {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, #ffffff0c, #ffffff04);
+    }
+
+    .wish-photo {
+      display: block;
+      width: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      background: #ffffff08;
+    }
+
+    .wish-body { padding: 22px; }
+
+    .wish-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .wish-body h3 {
+      margin: 13px 0 10px;
+      font-size: 17px;
+      overflow-wrap: anywhere;
+    }
+
+    .wish-message {
+      color: #e4d6e0;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin-bottom: 0;
+    }
+
+    .empty, .status-panel {
+      padding: 35px 22px;
+      border: 1px dashed #ffffff26;
+      border-radius: 18px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    .empty { grid-column: 1 / -1; }
+
+    .empty .emoji { font-size: 35px; }
+
+    .notice {
+      margin: 0 0 22px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      background: #ffffff08;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .notice.error {
+      color: #ffd0d0;
+      border: 1px solid #ff8e8e40;
+      background: #8f304d25;
+    }
+
+    .notice.success {
+      color: #d6f5d9;
+      border: 1px solid #88d69b35;
+    }
+
+    .footer {
+      padding-top: 38px;
+      color: #a995a5;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 680px) {
+      .shell { width: 91%; padding-top: 20px; }
+      .topbar { align-items: flex-start; }
+      .tag { display: none; }
+      .stats { grid-template-columns: 1fr; gap: 10px; }
+      .stat { padding: 17px; }
+      .stat .number { font-size: 30px; }
+      .wish-list { grid-template-columns: 1fr; }
+      .hero { border-radius: 20px; }
+      .section-heading { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">SITARE <span>30</span></div>
+      <div class="top-actions">
+        <span class="tag">PRIVATE BIRTHDAY DASHBOARD</span>
+        <button class="btn" id="logoutBtn" type="button">Log out ↗</button>
+      </div>
+    </header>
+
+    <div id="notice" class="notice hidden" role="status"></div>
+
+    <section class="hero">
+      <div class="eyebrow">Your birthday • Your memories</div>
+      <h1 id="welcomeTitle">Your special day deserves a special story.</h1>
+      <p id="welcomeText">
+        All the love, wishes and memories your classmates share for your birthday, gathered in one place.
+      </p>
+    </section>
+
+    <section class="stats" aria-label="Birthday statistics">
+      <article class="stat">
+        <span class="label">Total wishes</span>
+        <strong class="number" id="totalWishes">—</strong>
+      </article>
+      <article class="stat">
+        <span class="label">Wishes with photos</span>
+        <strong class="number" id="photoWishes">—</strong>
+      </article>
+      <article class="stat">
+        <span class="label">Birthday event</span>
+        <strong class="number" id="eventStatus" style="font-size:22px">Loading…</strong>
+      </article>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <div>
+          <h2>Words from your people</h2>
+          <p>Your classmates' messages, saved as memories.</p>
+        </div>
+        <button class="btn" id="refreshBtn" type="button">↻ Refresh wishes</button>
+      </div>
+
+      <div id="wishList" class="wish-list">
+        <div class="status-panel">Loading your birthday memories…</div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <strong>SITARE 30 — Birthday Archive</strong><br>
+      Made with love by your class · 2026–2029
+    </footer>
+  </main>
+
+  <script src="birthday-dashboard.js"></script>
+</body>
+</html>
