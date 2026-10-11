@@ -1,16 +1,24 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>SITARE 30 — Birthday Archive</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
@@ -22,28 +30,34 @@
              TOP BAR
         ========================== -->
 
-        <header class="topbar">
+       
+<header class="topbar">
+    <div class="brand">SITARE 30</div>
 
-            <div class="brand">
-                SITARE 30
-            </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+        <a href="birthday-login.html"
+           style="
+           text-decoration:none;
+           padding:10px 16px;
+           border:1px solid rgba(244,227,188,.3);
+           background:rgba(255,255,255,.08);
+           border-radius:999px;
+           color:#f4e3bc;
+           font-size:12px;
+           font-weight:750;
+           backdrop-filter:blur(14px);
+           transition:.25s ease;
+           ">
+            🎂 Birthday Student Login
+        </a>
 
-            <div class="top-actions">
+        <div class="pill">
+            THE PRIVATE BIRTHDAY ARCHIVE • BATCH OF 2030
+        </div>
+    </div>
+</header>
 
-                <div class="pill">
-                    THE PRIVATE BIRTHDAY ARCHIVE • BATCH OF 2030
-                </div>
 
-                <button
-                    class="admin-btn"
-                    onclick="openAdminLogin()"
-                >
-                    🔐 Admin
-                </button>
-
-            </div>
-
-        </header>
 
 
         <!-- =========================
@@ -52,9 +66,14 @@
 
         <div class="book-wrap">
 
-            <div class="book" id="book">
+            <div
+                class="book"
+                id="book"
+            >
 
-                <!-- COVER -->
+                <!-- =====================
+                     COVER PAGE
+                ====================== -->
 
                 <section
                     class="page cover"
@@ -73,7 +92,9 @@
 
                         <h1>
                             Happy Birthday,<br>
-                            Kalpana
+                            <span id="birthdayName">
+                                Aditya
+                            </span>
                         </h1>
 
                         <div class="gold-rule"></div>
@@ -83,7 +104,7 @@
                             photographs & memories
                         </div>
 
-                        <p>
+                        <p id="coverMessage">
                             Today is your page in our story.
                         </p>
 
@@ -100,204 +121,37 @@
                 </section>
 
 
-                <!-- STATIC PAGE 1 -->
+                <!-- =====================
+                     WISHES ARE INSERTED
+                     HERE DYNAMICALLY
+                ====================== -->
 
-                <section
-                    class="page person-page"
-                    style="--z:5"
-                >
+                <!--
+                    script.js will load approved
+                    wishes belonging ONLY to the
+                    current birthday event.
 
-                    <div class="page-inner">
+                    Example:
 
-                        <div class="person-layout">
+                    ?event=test-birthday
 
-                            <div class="person-photo">
-                                📸
-                            </div>
+                    will load:
 
-                            <div>
+                    birthday_events.slug
+                    =
+                    test-birthday
 
-                                <div class="chapter">
-                                    A NOTE FROM SAURABH VERMA
-                                </div>
+                    and then:
 
-                                <h2>
-                                    For Kalpana
-                                </h2>
+                    wishes.event_id
+                    =
+                    currentEvent.id
+                -->
 
-                                <p class="quote">
-                                    “Happy Birthday! Keep smiling,
-                                    keep winning, and keep making
-                                    the ordinary days feel special.
-                                    Here’s to another year of memories together.”
-                                </p>
 
-                                <div class="from">
-                                    SAURABH • Classmate
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="page-number">
-                            02
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- STATIC PAGE 2 -->
-
-                <section
-                    class="page person-page"
-                    style="--z:4"
-                >
-
-                    <div class="page-inner">
-
-                        <div class="person-layout">
-
-                            <div>
-
-                                <div class="chapter">
-                                    A NOTE FROM RAUNAK
-                                </div>
-
-                                <h2>
-                                    One more year,<br>
-                                    one more story.
-                                </h2>
-
-                                <p class="quote">
-                                    “Wishing you happiness,
-                                    success and countless moments
-                                    that make you stop and smile.
-                                    Save some memories for the class archive too! ✨”
-                                </p>
-
-                                <div class="from">
-                                    RAUNAK • Classmate
-                                </div>
-
-                            </div>
-
-                            <div class="person-photo">
-                                🌸
-                            </div>
-
-                        </div>
-
-                        <div class="page-number">
-                            03
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- STATIC PAGE 3 -->
-
-                <section
-                    class="page person-page"
-                    style="--z:3"
-                >
-
-                    <div class="page-inner">
-
-                        <div class="person-layout">
-
-                            <div class="person-photo">
-                                🎉
-                            </div>
-
-                            <div>
-
-                                <div class="chapter">
-                                    A NOTE FROM SAKSHI
-                                </div>
-
-                                <h2>
-                                    Make it unforgettable.
-                                </h2>
-
-                                <p class="quote">
-                                    “Many many happy returns!
-                                    Hope this year brings you adventures,
-                                    great people and the kind of memories
-                                    we’ll still laugh about in final year.”
-                                </p>
-
-                                <div class="from">
-                                    SAKSHI • Friend
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="page-number">
-                            04
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- STATIC PAGE 4 -->
-
-                <section
-                    class="page person-page"
-                    style="--z:2"
-                >
-
-                    <div class="page-inner">
-
-                        <div class="person-layout">
-
-                            <div>
-
-                                <div class="chapter">
-                                    A NOTE FROM ANSHU
-                                </div>
-
-                                <h2>
-                                    For the memories.
-                                </h2>
-
-                                <p class="quote">
-                                    “Happy Birthday!
-                                    This is just one little page today —
-                                    imagine how many pages we’ll have
-                                    filled by the time Batch 2030 graduates.” 💜
-                                </p>
-
-                                <div class="from">
-                                    ANSHU • Friend
-                                </div>
-
-                            </div>
-
-                            <div class="person-photo">
-                                💐
-                            </div>
-
-                        </div>
-
-                        <div class="page-number">
-                            05
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- FINAL PAGE -->
+                <!-- =====================
+                     FINAL PAGE
+                ====================== -->
 
                 <section
                     class="page cover"
@@ -340,7 +194,7 @@
                     </div>
 
                     <div class="page-number">
-                        06
+                        END
                     </div>
 
                 </section>
@@ -367,7 +221,7 @@
                 class="progress"
                 id="progress"
             >
-                COVER • 1 / 6
+                COVER • 1 / 2
             </div>
 
             <button
@@ -640,7 +494,13 @@
 </div>
 
 
+<!-- =========================
+     JAVASCRIPT
+========================== -->
+
 <script src="script.js"></script>
 
 </body>
+
 </html>
+

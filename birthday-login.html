@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Birthday Student Login | SITARE 30</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+
+            background:
+                radial-gradient(circle at 20% 10%, rgba(211,168,91,.18), transparent 28%),
+                radial-gradient(circle at 80% 20%, rgba(143,70,103,.22), transparent 30%),
+                linear-gradient(135deg, #21141f, #3a2030 55%, #171018);
+
+            color: #251821;
+            font-family: Inter, system-ui, sans-serif;
+        }
+
+        .login-card {
+            width: min(460px, 100%);
+            padding: 42px 34px;
+
+            background: rgba(255,250,240,.97);
+            border-radius: 22px;
+
+            box-shadow:
+                0 35px 90px rgba(0,0,0,.45),
+                inset 0 0 0 1px rgba(181,139,72,.25);
+
+            text-align: center;
+        }
+
+        .mark {
+            width: 78px;
+            height: 78px;
+            margin: 0 auto 22px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 50%;
+
+            background: linear-gradient(
+                145deg,
+                #fff7dc,
+                #cda15b
+            );
+
+            font-size: 36px;
+
+            box-shadow:
+                0 15px 35px rgba(112,69,54,.2);
+        }
+
+        .chapter {
+            color: #a77c3e;
+            text-transform: uppercase;
+            letter-spacing: .25em;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        h1 {
+            margin: 15px 0 8px;
+
+            font-family: Georgia, serif;
+            font-weight: 500;
+            font-size: 38px;
+            color: #4a2138;
+        }
+
+        .subtitle {
+            margin: 0 0 28px;
+
+            color: #806f78;
+            font-family: Georgia, serif;
+            line-height: 1.7;
+        }
+
+        .field {
+            text-align: left;
+            margin-bottom: 17px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 7px;
+
+            font-size: 13px;
+            font-weight: 750;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 14px;
+
+            border: 1px solid rgba(79,45,62,.18);
+            border-radius: 11px;
+
+            background: #fffdf8;
+            color: #251821;
+
+            font: inherit;
+            outline: none;
+        }
+
+        .field input:focus {
+            border-color: #a77c3e;
+            box-shadow: 0 0 0 3px rgba(167,124,62,.12);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px 20px;
+
+            border: 0;
+            border-radius: 999px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #54243e,
+                    #9a5d70 55%,
+                    #c49a55
+                );
+
+            color: white;
+            font-weight: 800;
+            font-size: 14px;
+
+            cursor: pointer;
+
+            box-shadow: 0 12px 28px rgba(84,36,62,.27);
+        }
+
+        button:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
+
+        .error {
+            display: none;
+
+            margin-top: 18px;
+            padding: 12px;
+
+            border-radius: 10px;
+
+            background: #f7dfe5;
+            color: #8f304d;
+
+            font-size: 13px;
+        }
+
+        .back {
+            display: block;
+            margin-top: 22px;
+
+            color: #806f78;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .back:hover {
+            color: #4a2138;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="login-card">
+
+        <div class="mark">🎂</div>
+
+        <div class="chapter">
+            SITARE 30 • PRIVATE ACCESS
+        </div>
+
+        <h1>Birthday Login</h1>
+
+        <p class="subtitle">
+            This space belongs only to the birthday person.
+            Open your private memory archive.
+        </p>
+
+        <form id="loginForm">
+
+            <div class="field">
+                <label for="email">Birthday Student Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="your@email.com"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <button type="submit" id="loginButton">
+                Open My Birthday Archive
+            </button>
+
+        </form>
+
+        <div class="error" id="errorMessage"></div>
+
+        <a href="index.html" class="back">
+            ← Back to Birthday Book
+        </a>
+
+    </main>
+
+    <script src="birthday-login.js"></script>
+
+</body>
+</html>

@@ -1,60 +1,243 @@
-/* =========================================================
-   SITARE 30 — BIRTHDAY ARCHIVE
-   Supabase + Personal Delete + Admin Delete
-========================================================= */
-
-
-/* =========================================================
-   SUPABASE
-========================================================= */
 
 const SUPABASE_URL =
-    "https://lfuputokddumahgvpnoy.supabase.co";
+    'https://lfuputokddumahgvpnoy.supabase.co';
 
 const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_cB406lyCNd-4Sc93dzwNOQ_Z-ztN067";
+    'sb_publishable_cB406lyCNd-4Sc93dzwNOQ_Z-ztN067';
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-    );
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
 
 
-/* =========================================================
-   BOOK STATE
-========================================================= */
+// ==========================================
+// GLOBAL STATE
+// ==========================================
 
-const book =
-    document.getElementById("book");
-
-const pages = [
-    ...document.querySelectorAll(".page")
-];
-
+let currentEvent = null;
+let book = null;
+let pages = [];
 let current = 0;
 
 
-/* =========================================================
-   ADMIN STATE
-========================================================= */
+// ==========================================
+// BIRTHDAY EVENT
+// ==========================================
 
-let adminSecret = null;
+async function loadBirthdayEvent() {
 
-let selectedAdminWishId = null;
+    try {
+
+        const params = new URLSearchParams(
+            window.location.search
+        );
+
+        const eventSlug = params.get('event');
+
+        let query = supabaseClient
+            .from('birthday_events')
+            .select(`
+                id,
+                birthday_person_name,
+                birthday_date,
+                year,
+                cover_message,
+                slug
+            `)
+            .eq('is_active', true);
+
+        // If URL contains ?event=slug
+        // load that specific birthday.
+        if (eventSlug) {
+
+            query = query.eq(
+                'slug',
+                eventSlug
+            );
+
+        }
+
+        const {
+            data,
+            error
+        } = await query
+            .limit(1)
+            .maybeSingle();
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data) {
+
+            console.error(
+                'No active birthday event found.'
+            );
+
+            showEventError();
+
+            return false;
+        }
+
+        currentEvent = data;
+
+        updateBirthdayUI();
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            'Could not load birthday event:',
+            error
+        );
+
+        showEventError();
+
+        return false;
+    }
+}
 
 
-/* =========================================================
-   BOOK RENDER
-========================================================= */
+// ==========================================
+// EVENT ERROR
+// ==========================================
+
+function showEventError() {
+
+    const nameElement =
+        document.getElementById(
+            'birthdayName'
+        );
+
+    const messageElement =
+        document.getElementById(
+            'coverMessage'
+        );
+
+    if (nameElement) {
+
+        nameElement.textContent =
+            'Birthday Archive';
+
+    }
+
+    if (messageElement) {
+
+        messageElement.textContent =
+            'This birthday archive is not available yet.';
+
+    }
+
+}
+
+
+// ==========================================
+// UPDATE BIRTHDAY UI
+// ==========================================
+
+function updateBirthdayUI() {
+
+    if (!currentEvent) return;
+
+    const birthdayName =
+        currentEvent.birthday_person_name ||
+        'Birthday Star';
+
+    const coverMessage =
+        currentEvent.cover_message ||
+        'Today is your page in our story.';
+
+
+    // Cover heading
+
+    const birthdayNameElement =
+        document.getElementById(
+            'birthdayName'
+        );
+
+    if (birthdayNameElement) {
+
+        birthdayNameElement.textContent =
+            birthdayName;
+
+    }
+
+
+    // Cover message
+
+    const coverMessageElement =
+        document.getElementById(
+            'coverMessage'
+        );
+
+    if (coverMessageElement) {
+
+        coverMessageElement.textContent =
+            coverMessage;
+
+    }
+
+
+    // Any other birthday-name elements
+
+    document
+        .querySelectorAll('.birthday-name')
+        .forEach(element => {
+
+            element.textContent =
+                birthdayName;
+
+        });
+
+
+    document
+        .querySelectorAll('[data-birthday-name]')
+        .forEach(element => {
+
+            element.textContent =
+                birthdayName;
+
+        });
+
+}
+
+
+// ==========================================
+// BOOK INITIALIZATION
+// ==========================================
+
+function initializeBookElements() {
+
+    book =
+        document.getElementById(
+            'book'
+        );
+
+    pages =
+        [
+            ...document.querySelectorAll(
+                '.page'
+            )
+        ];
+
+}
+
+
+// ==========================================
+// BOOK RENDER
+// ==========================================
 
 function render() {
+
+    if (!pages.length) return;
 
     pages.forEach(
         (page, index) => {
 
             page.classList.toggle(
-                "flipped",
+                'flipped',
                 index < current
             );
 
@@ -63,44 +246,42 @@ function render() {
 
 
     const progress =
-        document.getElementById("progress");
+        document.getElementById(
+            'progress'
+        );
 
+    if (!progress) return;
+
+
+    let label = 'MEMORY PAGE';
 
     if (current === 0) {
 
-        progress.textContent =
-            "COVER • 1 / " + pages.length;
+        label = 'COVER';
 
-    }
-
-    else if (
+    } else if (
         current === pages.length - 1
     ) {
 
-        progress.textContent =
-            "THE STORY CONTINUES • "
-            + (current + 1)
-            + " / "
-            + pages.length;
+        label =
+            'THE STORY CONTINUES';
 
     }
 
-    else {
 
-        progress.textContent =
-            "MEMORY PAGE • "
-            + (current + 1)
-            + " / "
-            + pages.length;
-
-    }
+    progress.textContent =
+        label +
+        ' • ' +
+        (current + 1) +
+        ' / ' +
+        pages.length;
 
 }
 
 
-/* =========================================================
-   NEXT / PREVIOUS
-========================================================= */
+// ==========================================
+// NEXT PAGE
+// ==========================================
 
 function nextPage() {
 
@@ -118,6 +299,10 @@ function nextPage() {
 }
 
 
+// ==========================================
+// PREVIOUS PAGE
+// ==========================================
+
 function prevPage() {
 
     if (current > 0) {
@@ -131,77 +316,94 @@ function prevPage() {
 }
 
 
-/* =========================================================
-   ADD WISH MODAL
-========================================================= */
+// ==========================================
+// WISH MODAL
+// ==========================================
 
 function openModal() {
 
-    document
-        .getElementById("modal")
-        .classList.add("open");
+    const modal =
+        document.getElementById(
+            'modal'
+        );
+
+    if (modal) {
+
+        modal.classList.add(
+            'open'
+        );
+
+    }
 
 }
 
 
 function closeModal() {
 
-    document
-        .getElementById("modal")
-        .classList.remove("open");
+    const modal =
+        document.getElementById(
+            'modal'
+        );
+
+    if (modal) {
+
+        modal.classList.remove(
+            'open'
+        );
+
+    }
 
 }
 
 
-/* =========================================================
-   ADD WISH
-========================================================= */
+// ==========================================
+// ADD WISH
+// ==========================================
 
 async function addWish() {
 
+    if (!currentEvent) {
+
+        alert(
+            'This birthday archive is not ready yet.'
+        );
+
+        return;
+
+    }
+
+
     const nameInput =
-        document.getElementById("name");
+        document.getElementById(
+            'name'
+        );
 
     const messageInput =
-        document.getElementById("message");
+        document.getElementById(
+            'message'
+        );
 
     const photoInput =
-        document.getElementById("photo");
+        document.getElementById(
+            'photo'
+        );
 
 
     const name =
-        nameInput.value.trim();
+        nameInput
+            ? nameInput.value.trim()
+            : '';
 
     const message =
-        messageInput.value.trim();
+        messageInput
+            ? messageInput.value.trim()
+            : '';
 
 
     if (!name || !message) {
 
         alert(
-            "Please enter your name and wish."
-        );
-
-        return;
-
-    }
-
-
-    if (name.length > 60) {
-
-        alert(
-            "Name must be 60 characters or less."
-        );
-
-        return;
-
-    }
-
-
-    if (message.length > 1000) {
-
-        alert(
-            "Your wish must be 1000 characters or less."
+            'Please enter your name and wish.'
         );
 
         return;
@@ -211,23 +413,28 @@ async function addWish() {
 
     const button =
         document.querySelector(
-            "#modal .primary"
+            '#modal .primary'
         );
 
 
-    button.disabled = true;
+    if (button) {
 
-    button.textContent =
-        "Saving your page... ✨";
+        button.disabled = true;
+
+        button.textContent =
+            'Saving your page... ✨';
+
+    }
 
 
     try {
 
-        /* -----------------------------------------
-           PHOTO
-        ----------------------------------------- */
-
         let photoUrl = null;
+
+
+        // ==================================
+        // PHOTO UPLOAD
+        // ==================================
 
         const file =
             photoInput
@@ -239,12 +446,12 @@ async function addWish() {
 
             if (
                 !file.type.startsWith(
-                    "image/"
+                    'image/'
                 )
             ) {
 
                 throw new Error(
-                    "Please select an image."
+                    'Please select an image.'
                 );
 
             }
@@ -256,7 +463,7 @@ async function addWish() {
             ) {
 
                 throw new Error(
-                    "Photo must be smaller than 5 MB."
+                    'Photo must be smaller than 5 MB.'
                 );
 
             }
@@ -264,7 +471,7 @@ async function addWish() {
 
             const extension =
                 file.name
-                    .split(".")
+                    .split('.')
                     .pop()
                     .toLowerCase();
 
@@ -278,7 +485,9 @@ async function addWish() {
             } =
                 await supabaseClient
                     .storage
-                    .from("birthday-photos")
+                    .from(
+                        'birthday-photos'
+                    )
                     .upload(
                         filePath,
                         file
@@ -297,7 +506,9 @@ async function addWish() {
             } =
                 supabaseClient
                     .storage
-                    .from("birthday-photos")
+                    .from(
+                        'birthday-photos'
+                    )
                     .getPublicUrl(
                         filePath
                     );
@@ -309,38 +520,51 @@ async function addWish() {
         }
 
 
-        /* -----------------------------------------
-           PRIVATE DELETE TOKEN
-        ----------------------------------------- */
+        // ==================================
+        // DELETE TOKEN
+        // ==================================
 
         const deleteToken =
             crypto.randomUUID();
 
 
-        /* -----------------------------------------
-           DATABASE INSERT
-        ----------------------------------------- */
+        // ==================================
+        // SAVE WISH
+        // ==================================
 
         const {
             data,
             error
         } =
             await supabaseClient
-                .from("wishes")
+                .from('wishes')
                 .insert({
 
-                    sender_name: name,
+                    event_id:
+                        currentEvent.id,
 
-                    message: message,
+                    sender_name:
+                        name,
 
-                    photo_url: photoUrl,
+                    message:
+                        message,
 
-                    delete_token: deleteToken
+                    photo_url:
+                        photoUrl,
+
+                    delete_token:
+                        deleteToken
 
                 })
-                .select(
-                    "id,sender_name,message,photo_url,approved,created_at"
-                )
+                .select(`
+                    id,
+                    event_id,
+                    sender_name,
+                    message,
+                    photo_url,
+                    approved,
+                    created_at
+                `)
                 .single();
 
 
@@ -351,12 +575,15 @@ async function addWish() {
         }
 
 
-        /* -----------------------------------------
-           ADD PAGE
-        ----------------------------------------- */
+        // ==================================
+        // ADD PAGE IMMEDIATELY
+        // ==================================
 
         addWishPage(data);
 
+
+        // The newly added page is immediately
+        // before the final "Story Continues" page.
 
         current =
             pages.length - 2;
@@ -365,87 +592,98 @@ async function addWish() {
         render();
 
 
-        /* -----------------------------------------
-           CLOSE + RESET
-        ----------------------------------------- */
+        // ==================================
+        // RESET FORM
+        // ==================================
 
         closeModal();
 
-        nameInput.value = "";
 
-        messageInput.value = "";
+        if (nameInput) {
+
+            nameInput.value = '';
+
+        }
+
+        if (messageInput) {
+
+            messageInput.value = '';
+
+        }
 
         if (photoInput) {
 
-            photoInput.value = "";
+            photoInput.value = '';
 
         }
 
 
-        /* -----------------------------------------
-           SHOW DELETE CODE
-        ----------------------------------------- */
+        // ==================================
+        // DELETE CODE
+        // ==================================
 
         alert(
-            "Your page has been added! ✨\n\n" +
-
-            "IMPORTANT — SAVE THIS PRIVATE DELETE CODE:\n\n" +
-
+            'Your page has been added! ✨\n\n' +
+            'IMPORTANT — SAVE THIS PRIVATE DELETE CODE:\n\n' +
             deleteToken +
-
-            "\n\nYou will need this code if you ever want to delete your page."
+            '\n\n' +
+            'You will need this code if you ever want to delete your page.'
         );
 
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(
-            "Wish error:",
+            'Wish error:',
             error
         );
 
 
         alert(
             error.message ||
-            "Something went wrong. Please try again."
+            'Something went wrong. Please try again.'
         );
 
-    }
 
-    finally {
+    } finally {
 
-        button.disabled = false;
+        if (button) {
 
-        button.textContent =
-            "Add My Page to the Book ✨";
+            button.disabled = false;
+
+            button.textContent =
+                'Add My Page to the Book ✨';
+
+        }
 
     }
 
 }
 
 
-/* =========================================================
-   ADD DYNAMIC WISH PAGE
-========================================================= */
+// ==========================================
+// CREATE WISH PAGE
+// ==========================================
 
 function addWishPage(wish) {
 
+    if (!book || !currentEvent) {
+        return;
+    }
+
+
     const page =
-        document.createElement("section");
+        document.createElement(
+            'section'
+        );
 
 
     page.className =
-        "page person-page";
-
-
-    page.dataset.wishId =
-        wish.id;
+        'page person-page';
 
 
     page.style.setProperty(
-        "--z",
+        '--z',
         pages.length + 1
     );
 
@@ -461,6 +699,16 @@ function addWishPage(wish) {
             wish.message
         );
 
+
+    const birthdayName =
+        escapeHtml(
+            currentEvent.birthday_person_name
+        );
+
+
+    // ==================================
+    // PHOTO
+    // ==================================
 
     const photoHTML =
         wish.photo_url
@@ -480,6 +728,10 @@ function addWishPage(wish) {
               `;
 
 
+    // ==================================
+    // PAGE CONTENT
+    // ==================================
+
     page.innerHTML = `
 
         <div class="page-inner">
@@ -488,46 +740,28 @@ function addWishPage(wish) {
 
                 ${photoHTML}
 
-
                 <div>
 
                     <div class="chapter">
-
                         A NEW PAGE FROM
                         ${safeName.toUpperCase()}
-
                     </div>
 
-
                     <h2>
-                        For Kalpana
+                        For ${birthdayName}
                     </h2>
-
 
                     <p class="quote">
                         “${safeMessage}”
                     </p>
 
-
                     <div class="from">
-
-                        ${safeName}
-                        • Classmate
-
+                        ${safeName} • Classmate
                     </div>
-
-
-                    <button
-                        class="admin-delete"
-                        onclick="openAdminDelete('${wish.id}', '${safeName}')"
-                    >
-                        🗑️ Admin Delete This Page
-                    </button>
 
                 </div>
 
             </div>
-
 
             <div class="page-number">
                 NEW
@@ -538,8 +772,21 @@ function addWishPage(wish) {
     `;
 
 
+    // ==================================
+    // INSERT BEFORE FINAL PAGE
+    // ==================================
+
     const finalPage =
-        pages[pages.length - 1];
+        pages[
+            pages.length - 1
+        ];
+
+
+    if (!finalPage) {
+
+        return;
+
+    }
 
 
     book.insertBefore(
@@ -555,11 +802,15 @@ function addWishPage(wish) {
     );
 
 
+    // ==================================
+    // UPDATE Z-INDEX
+    // ==================================
+
     pages.forEach(
         (item, index) => {
 
             item.style.setProperty(
-                "--z",
+                '--z',
                 pages.length - index
             );
 
@@ -569,11 +820,16 @@ function addWishPage(wish) {
 }
 
 
-/* =========================================================
-   LOAD SAVED WISHES
-========================================================= */
+// ==========================================
+// LOAD WISHES
+// ==========================================
 
 async function loadWishes() {
+
+    if (!currentEvent) {
+        return;
+    }
+
 
     try {
 
@@ -582,16 +838,26 @@ async function loadWishes() {
             error
         } =
             await supabaseClient
-                .from("wishes")
-                .select(
-                    "id,sender_name,message,photo_url,approved,created_at"
+                .from('wishes')
+                .select(`
+                    id,
+                    event_id,
+                    sender_name,
+                    message,
+                    photo_url,
+                    approved,
+                    created_at
+                `)
+                .eq(
+                    'event_id',
+                    currentEvent.id
                 )
                 .eq(
-                    "approved",
+                    'approved',
                     true
                 )
                 .order(
-                    "created_at",
+                    'created_at',
                     {
                         ascending: true
                     }
@@ -605,10 +871,14 @@ async function loadWishes() {
         }
 
 
+        // Add database wishes to book
+
         (data || []).forEach(
             wish => {
 
-                addWishPage(wish);
+                addWishPage(
+                    wish
+                );
 
             }
         );
@@ -618,12 +888,11 @@ async function loadWishes() {
 
         render();
 
-    }
 
-    catch (error) {
+    } catch (error) {
 
         console.error(
-            "Could not load wishes:",
+            'Could not load wishes:',
             error
         );
 
@@ -632,63 +901,81 @@ async function loadWishes() {
 }
 
 
-/* =========================================================
-   PERSONAL DELETE
-========================================================= */
+// ==========================================
+// DELETE WISH MODAL
+// ==========================================
 
 function openDeleteModal() {
 
-    closeModal();
+    const modal =
+        document.getElementById(
+            'deleteModal'
+        );
 
-    document
-        .getElementById("deleteModal")
-        .classList.add("open");
+    if (modal) {
+
+        modal.classList.add(
+            'open'
+        );
+
+    }
 
 }
 
 
 function closeDeleteModal() {
 
-    document
-        .getElementById("deleteModal")
-        .classList.remove("open");
+    const modal =
+        document.getElementById(
+            'deleteModal'
+        );
+
+    if (modal) {
+
+        modal.classList.remove(
+            'open'
+        );
+
+    }
 
 
     const input =
         document.getElementById(
-            "deleteCode"
+            'deleteCode'
         );
 
 
     if (input) {
 
-        input.value = "";
+        input.value = '';
 
     }
 
 }
 
 
-/* =========================================================
-   DELETE MY OWN WISH
-========================================================= */
+// ==========================================
+// DELETE WISH
+// ==========================================
 
 async function deleteWish() {
 
     const tokenInput =
         document.getElementById(
-            "deleteCode"
+            'deleteCode'
         );
 
 
     const token =
-        tokenInput.value.trim();
+        tokenInput
+            ? tokenInput.value.trim()
+            : '';
 
 
     if (!token) {
 
         alert(
-            "Please enter your delete code."
+            'Please enter your delete code.'
         );
 
         return;
@@ -698,7 +985,7 @@ async function deleteWish() {
 
     if (
         !confirm(
-            "Are you sure you want to permanently delete your wish?"
+            'Are you sure you want to permanently delete your wish?'
         )
     ) {
 
@@ -709,452 +996,34 @@ async function deleteWish() {
 
     const button =
         document.querySelector(
-            "#deleteModal .primary"
+            '#deleteModal .primary'
         );
 
 
-    button.disabled = true;
+    if (button) {
 
-    button.textContent =
-        "Deleting...";
-
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.rpc(
-                "delete_my_wish",
-                {
-                    secret_token: token
-                }
-            );
-
-
-        if (error) {
-
-            throw error;
-
-        }
-
-
-        if (!data) {
-
-            alert(
-                "Invalid delete code. No wish was deleted."
-            );
-
-            return;
-
-        }
-
-
-        alert(
-            "Your wish has been deleted. 🗑️"
-        );
-
-
-        closeDeleteModal();
-
-
-        location.reload();
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Delete error:",
-            error
-        );
-
-
-        alert(
-            "Could not delete the wish. Please try again."
-        );
-
-    }
-
-    finally {
-
-        button.disabled = false;
+        button.disabled = true;
 
         button.textContent =
-            "Delete My Page";
+            'Deleting...';
 
     }
-
-}
-
-
-/* =========================================================
-   ADMIN LOGIN
-========================================================= */
-
-function openAdminLogin() {
-
-    document
-        .getElementById("adminModal")
-        .classList.add("open");
-
-
-    setTimeout(
-        () => {
-
-            document
-                .getElementById("adminCode")
-                .focus();
-
-        },
-        100
-    );
-
-}
-
-
-function closeAdminLogin() {
-
-    document
-        .getElementById("adminModal")
-        .classList.remove("open");
-
-
-    document
-        .getElementById("adminCode")
-        .value = "";
-
-}
-
-
-/* =========================================================
-   ADMIN AUTHENTICATION
-========================================================= */
-
-async function loginAdmin() {
-
-    const input =
-        document.getElementById(
-            "adminCode"
-        );
-
-
-    const enteredCode =
-        input.value.trim();
-
-
-    if (!enteredCode) {
-
-        alert(
-            "Please enter the admin code."
-        );
-
-        return;
-
-    }
-
-
-    const button =
-        document.querySelector(
-            "#adminModal .primary"
-        );
-
-
-    button.disabled = true;
-
-    button.textContent =
-        "Checking access...";
 
 
     try {
-
-        /*
-         * We verify the code through the database.
-         * The actual admin secret is NEVER stored
-         * inside this JavaScript file.
-         */
 
         const {
             data,
             error
         } =
             await supabaseClient
-                .from("admin_settings")
-                .select("id")
-                .eq("id", 1)
-                .eq(
-                    "admin_secret",
-                    enteredCode
-                )
-                .maybeSingle();
-
-
-        /*
-         * Because RLS is enabled and there is
-         * intentionally NO public SELECT policy,
-         * the above direct check will normally fail.
-         *
-         * Therefore we use the dedicated verification RPC
-         * below.
-         */
-
-        if (error) {
-
-            console.log(
-                "Direct admin check blocked as expected."
-            );
-
-        }
-
-
-        /*
-         * Store entered code locally ONLY after
-         * the admin delete RPC confirms it.
-         */
-
-        const testResult =
-            await supabaseClient.rpc(
-                "admin_delete_wish",
-                {
-                    secret_token: enteredCode,
-                    wish_id:
-                        "00000000-0000-0000-0000-000000000000"
-                }
-            );
-
-
-        /*
-         * A false result means:
-         * - invalid admin code, OR
-         * - simply no matching dummy wish.
-         *
-         * We need a separate verification function
-         * for clean authentication.
-         */
-
-        if (
-            testResult.error &&
-            !String(
-                testResult.error.message
-            ).includes("permission")
-        ) {
-
-            /*
-             * If RPC itself works, false means the
-             * admin code was probably checked and no
-             * dummy wish existed.
-             *
-             * We therefore perform a safe verification
-             * using the admin verification RPC.
-             */
-
-        }
-
-
-        const {
-            data: verified,
-            error: verifyError
-        } =
-            await supabaseClient.rpc(
-                "verify_admin_code",
-                {
-                    secret_token: enteredCode
-                }
-            );
-
-
-        if (verifyError) {
-
-            throw verifyError;
-
-        }
-
-
-        if (!verified) {
-
-            alert(
-                "Invalid admin code."
-            );
-
-            return;
-
-        }
-
-
-        adminSecret =
-            enteredCode;
-
-
-        document.body.classList.add(
-            "admin-mode"
-        );
-
-
-        closeAdminLogin();
-
-
-        alert(
-            "Admin controls unlocked. 🔐"
-        );
-
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Admin login error:",
-            error
-        );
-
-
-        alert(
-            "Could not verify admin access."
-        );
-
-    }
-
-    finally {
-
-        button.disabled = false;
-
-        button.textContent =
-            "Unlock Admin Controls";
-
-    }
-
-}
-
-
-/* =========================================================
-   ADMIN DELETE OPEN
-========================================================= */
-
-function openAdminDelete(
-    wishId,
-    senderName
-) {
-
-    if (!adminSecret) {
-
-        alert(
-            "Please unlock Admin Controls first."
-        );
-
-        openAdminLogin();
-
-        return;
-
-    }
-
-
-    selectedAdminWishId =
-        wishId;
-
-
-    document.getElementById(
-        "adminDeleteText"
-    ).textContent =
-        `You are about to permanently delete ${senderName}'s page from the birthday archive.`;
-
-
-    document
-        .getElementById(
-            "adminDeleteModal"
-        )
-        .classList.add("open");
-
-}
-
-
-/* =========================================================
-   CLOSE ADMIN DELETE
-========================================================= */
-
-function closeAdminDeleteModal() {
-
-    document
-        .getElementById(
-            "adminDeleteModal"
-        )
-        .classList.remove("open");
-
-
-    selectedAdminWishId = null;
-
-}
-
-
-/* =========================================================
-   CONFIRM ADMIN DELETE
-========================================================= */
-
-async function confirmAdminDelete() {
-
-    if (!adminSecret) {
-
-        alert(
-            "Admin access expired."
-        );
-
-        closeAdminDeleteModal();
-
-        return;
-
-    }
-
-
-    if (!selectedAdminWishId) {
-
-        alert(
-            "No page selected."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        !confirm(
-            "This will permanently delete this wish. Continue?"
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    const button =
-        document.querySelector(
-            "#adminDeleteModal .danger-button"
-        );
-
-
-    button.disabled = true;
-
-    button.textContent =
-        "Deleting...";
-
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.rpc(
-                "admin_delete_wish",
-                {
-                    secret_token:
-                        adminSecret,
-
-                    wish_id:
-                        selectedAdminWishId
-                }
-            );
+                .rpc(
+                    'delete_my_wish',
+                    {
+                        secret_token:
+                            token
+                    }
+                );
 
 
         if (error) {
@@ -1167,7 +1036,7 @@ async function confirmAdminDelete() {
         if (!data) {
 
             alert(
-                "Admin code is invalid or the wish no longer exists."
+                'Invalid delete code. No wish was deleted.'
             );
 
             return;
@@ -1176,110 +1045,164 @@ async function confirmAdminDelete() {
 
 
         alert(
-            "The wish has been permanently deleted. 🗑️"
+            'Your wish has been deleted. 🗑️'
         );
 
 
-        closeAdminDeleteModal();
-
+        closeDeleteModal();
 
         location.reload();
 
-    }
 
-    catch (error) {
+    } catch (error) {
 
         console.error(
-            "Admin delete error:",
+            'Delete error:',
             error
         );
 
 
         alert(
-            "Could not delete this wish."
+            'Could not delete the wish. Please try again.'
+        );
+
+
+    } finally {
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                'Delete My Page';
+
+        }
+
+    }
+
+}
+
+
+// ==========================================
+// SECURITY HELPER
+// ==========================================
+
+function escapeHtml(value) {
+
+    return String(
+        value ?? ''
+    ).replace(
+        /[&<>'"]/g,
+        character => ({
+
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+
+        })[character]
+    );
+
+}
+
+
+// ==========================================
+// MODAL EVENTS
+// ==========================================
+
+function setupModalEvents() {
+
+    const modal =
+        document.getElementById(
+            'modal'
+        );
+
+    if (modal) {
+
+        modal.addEventListener(
+            'click',
+            event => {
+
+                if (
+                    event.target.id ===
+                    'modal'
+                ) {
+
+                    closeModal();
+
+                }
+
+            }
         );
 
     }
 
-    finally {
 
-        button.disabled = false;
+    const deleteModal =
+        document.getElementById(
+            'deleteModal'
+        );
 
-        button.textContent =
-            "Permanently Delete";
+    if (deleteModal) {
+
+        deleteModal.addEventListener(
+            'click',
+            event => {
+
+                if (
+                    event.target.id ===
+                    'deleteModal'
+                ) {
+
+                    closeDeleteModal();
+
+                }
+
+            }
+        );
 
     }
 
 }
 
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
+// ==========================================
+// KEYBOARD CONTROLS
+// ==========================================
 
-function escapeHtml(value) {
+function setupKeyboardControls() {
 
-    return String(value).replace(
-        /[&<>'"]/g,
-        function (character) {
-
-            return {
-
-                "&":
-                    "&amp;",
-
-                "<":
-                    "&lt;",
-
-                ">":
-                    "&gt;",
-
-                "'":
-                    "&#39;",
-
-                '"':
-                    "&quot;"
-
-            }[character];
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   MODAL BACKGROUND CLICK
-========================================================= */
-
-document
-    .getElementById("modal")
-    .addEventListener(
-        "click",
+    document.addEventListener(
+        'keydown',
         event => {
 
             if (
-                event.target.id === "modal"
+                event.key ===
+                'ArrowRight'
             ) {
 
-                closeModal();
+                nextPage();
 
             }
 
-        }
-    );
-
-
-document
-    .getElementById("deleteModal")
-    .addEventListener(
-        "click",
-        event => {
 
             if (
-                event.target.id ===
-                "deleteModal"
+                event.key ===
+                'ArrowLeft'
             ) {
+
+                prevPage();
+
+            }
+
+
+            if (
+                event.key ===
+                'Escape'
+            ) {
+
+                closeModal();
 
                 closeDeleteModal();
 
@@ -1288,93 +1211,49 @@ document
         }
     );
 
-
-document
-    .getElementById("adminModal")
-    .addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target.id ===
-                "adminModal"
-            ) {
-
-                closeAdminLogin();
-
-            }
-
-        }
-    );
+}
 
 
-document
-    .getElementById("adminDeleteModal")
-    .addEventListener(
-        "click",
-        event => {
+// ==========================================
+// START BOOK
+// ==========================================
 
-            if (
-                event.target.id ===
-                "adminDeleteModal"
-            ) {
+async function initializeBook() {
 
-                closeAdminDeleteModal();
+    initializeBookElements();
 
-            }
+    setupModalEvents();
 
-        }
-    );
+    setupKeyboardControls();
 
 
-/* =========================================================
-   KEYBOARD
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key === "ArrowRight"
-        ) {
-
-            nextPage();
-
-        }
+    const eventLoaded =
+        await loadBirthdayEvent();
 
 
-        if (
-            event.key === "ArrowLeft"
-        ) {
+    if (!eventLoaded) {
 
-            prevPage();
+        console.error(
+            'Birthday archive could not be initialized.'
+        );
 
-        }
+        render();
 
-
-        if (
-            event.key === "Escape"
-        ) {
-
-            closeModal();
-
-            closeDeleteModal();
-
-            closeAdminLogin();
-
-            closeAdminDeleteModal();
-
-        }
+        return;
 
     }
-);
 
 
-/* =========================================================
-   INITIAL LOAD
-========================================================= */
+    await loadWishes();
 
-loadWishes();
+    render();
 
-render();
+}
+
+
+// ==========================================
+// START
+// ==========================================
+
+initializeBook();
+
