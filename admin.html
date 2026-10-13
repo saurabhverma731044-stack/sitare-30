@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | SITARE 30</title>
+  <meta name="robots" content="noindex">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="panel.css">
+</head>
+
+<body>
+  <main class="shell">
+
+    <!-- ===== LOGIN ===== -->
+    <section id="loginSection" class="login-card hidden">
+      <div class="eyebrow">SITARE 30 • ADMIN</div>
+      <h1>Admin sign in</h1>
+      <p>Only archive admins can manage birthdays and wishes.</p>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="adminEmail">Email</label>
+          <input id="adminEmail" type="email" autocomplete="email" required>
+        </div>
+
+        <div class="field">
+          <label for="adminPassword">Password</label>
+          <input id="adminPassword" type="password" autocomplete="current-password" required>
+        </div>
+
+        <button class="btn primary" id="loginButton" type="submit" style="width:100%">Sign in</button>
+      </form>
+
+      <div class="notice error hidden" id="loginError" style="margin-top:16px" role="alert"></div>
+
+      <p style="margin:18px 0 0;font-size:13px"><a href="index.html" style="color:var(--gold)">← Back to the book</a></p>
+    </section>
+
+    <!-- ===== ADMIN PANEL ===== -->
+    <section id="adminSection" class="hidden">
+
+      <header class="topbar">
+        <div class="brand">SITARE <span>30</span> <small style="font-size:13px;color:var(--muted)">Admin</small></div>
+        <div class="top-actions">
+          <span class="tag" id="adminWho"></span>
+          <a class="btn" href="index.html">Open site</a>
+          <button class="btn" id="signOutBtn" type="button">Sign out</button>
+        </div>
+      </header>
+
+      <nav class="tabs" role="tablist">
+        <button class="tab active" type="button" data-tab="events">🎂 Birthday events</button>
+        <button class="tab" type="button" data-tab="wishes">💌 Wishes</button>
+      </nav>
+
+      <!-- EVENTS TAB -->
+      <section id="tab-events">
+
+        <div class="section-heading">
+          <div>
+            <h2>Birthday events</h2>
+            <p>Two people with the same birthday? Create two events with the same date. Each gets its own book and link.</p>
+          </div>
+          <button class="btn primary" id="newEventBtn" type="button">＋ New birthday event</button>
+        </div>
+
+        <form id="eventForm" class="panel form-panel hidden">
+          <h3 id="eventFormTitle" style="font-size:20px">New birthday event</h3>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="evName">Birthday person's name</label>
+              <input id="evName" type="text" maxlength="80" required>
+            </div>
+
+            <div class="field">
+              <label for="evDate">Birthday date</label>
+              <input id="evDate" type="date" required>
+            </div>
+
+            <div class="field">
+              <label for="evSlug">Link name (slug)</label>
+              <input id="evSlug" type="text" maxlength="60" required>
+              <small>Link will be index.html?event=<b id="slugPreview">…</b>. Lowercase letters, numbers and dashes.</small>
+            </div>
+
+            <div class="field">
+              <label for="evStudent">Birthday student's login email</label>
+              <input id="evStudent" type="email" placeholder="optional">
+              <small>The account must already exist (Supabase → Authentication → Users).</small>
+            </div>
+
+            <div class="field wide">
+              <label for="evCover">Cover message</label>
+              <textarea id="evCover" maxlength="300" placeholder="Today is your page in our story."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="evOpens">Wishes open (your device time)</label>
+              <input id="evOpens" type="datetime-local" required>
+            </div>
+
+            <div class="field">
+              <label for="evCloses">Wishes close → becomes archive</label>
+              <input id="evCloses" type="datetime-local" required>
+              <small>Filled automatically as the birthday date + 24 hours. You can change it.</small>
+            </div>
+
+            <div class="field wide">
+              <label class="check"><input type="checkbox" id="evListed" checked> Show in the website's list of birthdays</label>
+              <label class="check"><input type="checkbox" id="evApproval"> Wishes need my approval before they appear</label>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <button class="btn primary" id="saveEventBtn" type="submit">Save event</button>
+            <button class="btn" id="cancelEventBtn" type="button">Cancel</button>
+          </div>
+        </form>
+
+        <div id="eventsList" class="row-list"></div>
+      </section>
+
+      <!-- WISHES TAB -->
+      <section id="tab-wishes" class="hidden">
+
+        <div class="section-heading">
+          <div>
+            <h2>Wishes</h2>
+            <p>Edit, approve, unpublish or delete any wish.</p>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <select id="wishEvent" aria-label="Birthday event"></select>
+
+          <select id="wishFilter" aria-label="Filter">
+            <option value="all">All wishes</option>
+            <option value="pending">Pending only</option>
+            <option value="approved">Published only</option>
+          </select>
+
+          <button class="btn" id="reloadWishesBtn" type="button">↻ Refresh</button>
+        </div>
+
+        <div id="wishesList" class="row-list"></div>
+      </section>
+
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

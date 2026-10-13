@@ -9,17 +9,14 @@ const supabaseClient = window.supabase.createClient(
     SUPABASE_PUBLISHABLE_KEY
 );
 
-
 const loginForm = document.getElementById("loginForm");
 const loginButton = document.getElementById("loginButton");
 const errorMessage = document.getElementById("errorMessage");
-
 
 function showError(message) {
     errorMessage.textContent = message;
     errorMessage.style.display = "block";
 }
-
 
 loginForm.addEventListener("submit", async (event) => {
 
@@ -27,14 +24,8 @@ loginForm.addEventListener("submit", async (event) => {
 
     errorMessage.style.display = "none";
 
-    const email = document
-        .getElementById("email")
-        .value
-        .trim();
-
-    const password = document
-        .getElementById("password")
-        .value;
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
     if (!email || !password) {
         showError("Please enter your email and password.");
@@ -44,72 +35,34 @@ loginForm.addEventListener("submit", async (event) => {
     loginButton.disabled = true;
     loginButton.textContent = "Opening your archive...";
 
-
     try {
 
-        const {
-            data,
-            error
-        } = await supabaseClient.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
             email,
             password
         });
 
+        if (error) throw error;
 
-        if (error) {
-            throw error;
-        }
+        if (!data.user) throw new Error("Login could not be completed.");
 
-
-        if (!data.user) {
-            throw new Error("Login could not be completed.");
-        }
-
-
-        /*
-         * IMPORTANT:
-         * The logged-in user must actually be
-         * registered as a birthday student
-         * inside birthday_events.
-         */
-
-        const {
-            data: birthdayEvent,
-            error: eventError
-        } = await supabaseClient
+        // The account must be linked to at least one birthday event.
+        // (Old or archived events count too, so past birthdays keep working.)
+        const { data: linked, error: eventError } = await supabaseClient
             .from("birthday_events")
-            .select("id, birthday_person_name, birthday_date")
+            .select("id")
             .eq("birthday_person_id", data.user.id)
-            .eq("is_active", true)
-            .maybeSingle();
+            .limit(1);
 
+        if (eventError) throw eventError;
 
-        if (eventError) {
-            throw eventError;
-        }
-
-
-        if (!birthdayEvent) {
-
+        if (!linked || !linked.length) {
             await supabaseClient.auth.signOut();
 
             throw new Error(
-                "This account is not registered as a birthday student."
+                "This account is not registered as a birthday student. Ask the admin to link your account."
             );
         }
-
-
-        sessionStorage.setItem(
-            "birthday_event_id",
-            birthdayEvent.id
-        );
-
-
-        sessionStorage.setItem(
-            "birthday_person_name",
-            birthdayEvent.birthday_person_name
-        );
-
 
         window.location.href = "birthday-dashboard.html";
 
@@ -117,14 +70,10 @@ loginForm.addEventListener("submit", async (event) => {
 
         console.error("Birthday login error:", error);
 
-        showError(
-            error.message ||
-            "Login failed. Please try again."
-        );
+        showError(error.message || "Login failed. Please try again.");
 
         loginButton.disabled = false;
-        loginButton.textContent =
-            "Open My Birthday Archive";
+        loginButton.textContent = "Open My Birthday Archive";
     }
 
 });

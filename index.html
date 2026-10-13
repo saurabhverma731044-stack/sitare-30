@@ -1,506 +1,238 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>SITARE 30 — Birthday Archive</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <link rel="stylesheet" href="style.css">
-
 </head>
-
 
 <body>
 
 <div id="app">
-
     <main class="container">
 
-        <!-- =========================
-             TOP BAR
-        ========================== -->
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="brand">SITARE 30</div>
 
-       
-<header class="topbar">
-    <div class="brand">SITARE 30</div>
+            <div class="top-actions">
+                <a class="top-link" href="birthday-login.html">🎂 Birthday Student Login</a>
+                <a class="top-link" href="admin.html">🔐 Admin</a>
 
-    <div style="display:flex;align-items:center;gap:10px;">
-        <a href="birthday-login.html"
-           style="
-           text-decoration:none;
-           padding:10px 16px;
-           border:1px solid rgba(244,227,188,.3);
-           background:rgba(255,255,255,.08);
-           border-radius:999px;
-           color:#f4e3bc;
-           font-size:12px;
-           font-weight:750;
-           backdrop-filter:blur(14px);
-           transition:.25s ease;
-           ">
-            🎂 Birthday Student Login
-        </a>
+                <div class="pill">
+                    THE PRIVATE BIRTHDAY ARCHIVE • BATCH OF 2030
+                </div>
+            </div>
+        </header>
 
-        <div class="pill">
-            THE PRIVATE BIRTHDAY ARCHIVE • BATCH OF 2030
-        </div>
-    </div>
-</header>
+        <!-- OPEN / ARCHIVE MESSAGE -->
+        <div id="statusBanner" class="status-banner" hidden></div>
 
-
-
-
-        <!-- =========================
-             BOOK
-        ========================== -->
-
+        <!-- BOOK -->
         <div class="book-wrap">
+            <div class="book" id="book">
 
-            <div
-                class="book"
-                id="book"
-            >
-
-                <!-- =====================
-                     COVER PAGE
-                ====================== -->
-
-                <section
-                    class="page cover"
-                    style="--z:6"
-                >
-
+                <!-- COVER -->
+                <section class="page cover" style="--z:2">
                     <div class="page-inner">
 
-                        <div class="cover-mark">
-                            🎂
-                        </div>
+                        <div class="cover-mark">🎂</div>
 
-                        <div class="chapter">
-                            SITARE UNIVERSITY • 2030
-                        </div>
+                        <div class="chapter">SITARE UNIVERSITY • 2030</div>
 
                         <h1>
                             Happy Birthday,<br>
-                            <span id="birthdayName">
-                                Aditya Sharma
-                            </span>
+                            <span id="birthdayName">Loading…</span>
                         </h1>
 
                         <div class="gold-rule"></div>
 
                         <div class="subtitle">
-                            A little book of wishes,
-                            photographs & memories
+                            A little book of wishes, photographs &amp; memories
                         </div>
 
-                        <p id="coverMessage">
-                            Today is your page in our story.
-                        </p>
+                        <p id="coverMessage">Today is your page in our story.</p>
 
-                        <small>
-                            Open the book →
-                        </small>
-
+                        <small id="coverHint">Open the book →</small>
                     </div>
 
-                    <div class="page-number">
-                        01
-                    </div>
-
+                    <div class="page-number">01</div>
                 </section>
 
+                <!-- Wish pages are inserted here by script.js -->
 
-                <!-- =====================
-                     WISHES ARE INSERTED
-                     HERE DYNAMICALLY
-                ====================== -->
-
-                <!--
-                    script.js will load approved
-                    wishes belonging ONLY to the
-                    current birthday event.
-
-                    Example:
-
-                    ?event=test-birthday
-
-                    will load:
-
-                    birthday_events.slug
-                    =
-                    test-birthday
-
-                    and then:
-
-                    wishes.event_id
-                    =
-                    currentEvent.id
-                -->
-
-
-                <!-- =====================
-                     FINAL PAGE
-                ====================== -->
-
-                <section
-                    class="page cover"
-                    style="--z:1"
-                >
-
+                <!-- FINAL PAGE -->
+                <section class="page cover" style="--z:1">
                     <div class="page-inner">
 
-                        <div class="cover-mark">
-                            ♡
-                        </div>
+                        <div class="cover-mark">♡</div>
 
-                        <div class="chapter">
-                            THE STORY CONTINUES
-                        </div>
+                        <div class="chapter">THE STORY CONTINUES</div>
 
-                        <h2>
-                            Keep the memories.
-                        </h2>
+                        <h2>Keep the memories.</h2>
 
-                        <p>
-                            Every birthday, every photograph
-                            and every little message becomes
-                            another page in the SITARE 30 story.
+                        <p id="finalText">
+                            Every birthday, every photograph and every little
+                            message becomes another page in the SITARE 30 story.
                         </p>
 
                         <div class="gold-rule"></div>
 
                         <button
                             class="primary"
-                            onclick="openModal()"
+                            id="addWishBtn"
+                            type="button"
+                            onclick="openM('modal')"
+                            hidden
                         >
                             💌 Add Your Wish
                         </button>
 
+                        <p class="closed-note" id="closedNote" hidden></p>
+
                         <small style="margin-top:20px">
                             2026 — 2029 • Our class, our archive.
                         </small>
-
                     </div>
 
-                    <div class="page-number">
-                        END
-                    </div>
-
+                    <div class="page-number">END</div>
                 </section>
 
             </div>
-
         </div>
 
-
-        <!-- =========================
-             NAVIGATION
-        ========================== -->
-
+        <!-- NAVIGATION -->
         <div class="controls">
+            <button class="nav-btn" type="button" onclick="prevPage()">← Previous</button>
 
-            <button
-                class="nav-btn"
-                onclick="prevPage()"
-            >
-                ← Previous
-            </button>
+            <div class="progress" id="progress">COVER • 1 / 2</div>
 
-            <div
-                class="progress"
-                id="progress"
-            >
-                COVER • 1 / 2
-            </div>
-
-            <button
-                class="nav-btn"
-                onclick="nextPage()"
-            >
-                Next →
-            </button>
-
+            <button class="nav-btn" type="button" onclick="nextPage()">Next →</button>
         </div>
+
+        <!-- OTHER BIRTHDAYS / ARCHIVE -->
+        <nav class="event-strip" id="eventStrip" aria-label="Birthdays" hidden></nav>
 
     </main>
-
 </div>
 
 
-<!-- =========================
-     ADD WISH MODAL
-========================== -->
-
-<div
-    class="modal"
-    id="modal"
->
-
+<!-- ADD WISH -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="wishTitle">
     <div class="modal-card">
 
-        <button
-            class="close"
-            onclick="closeModal()"
-        >
-            ×
-        </button>
+        <button class="close" type="button" aria-label="Close" onclick="closeM('modal')">×</button>
 
-        <div class="chapter">
-            SITARE 30 • MEMORY ARCHIVE
-        </div>
+        <div class="chapter">SITARE 30 • MEMORY ARCHIVE</div>
 
-        <h2>
-            💌 Write your own page
-        </h2>
+        <h2 id="wishTitle">💌 Write your own page</h2>
 
         <p class="modal-intro">
-            Anyone from the class can leave a birthday message.
-            Write it yourself and it will appear as a new page
-            in the book.
+            Anyone from the class can leave a birthday message while wishes are
+            open. You can edit or delete it later with your private code.
         </p>
 
-
         <div class="field">
-
-            <label>
-                Your name
-            </label>
-
-            <input
-                id="name"
-                placeholder="e.g. Rahul"
-                autocomplete="name"
-            >
-
+            <label for="name">Your name</label>
+            <input id="name" placeholder="e.g. Rahul" autocomplete="name" maxlength="60">
         </div>
 
-
         <div class="field">
-
-            <label>
-                Your message
-            </label>
-
-            <textarea
-                id="message"
-                placeholder="Write something beautiful..."
-            ></textarea>
-
+            <label for="message">Your message</label>
+            <textarea id="message" placeholder="Write something beautiful..." maxlength="1000"></textarea>
         </div>
 
-
         <div class="field">
-
-            <label>
-                Your photo
-                <span>(optional)</span>
-            </label>
-
-            <input
-                type="file"
-                id="photo"
-                accept="image/*"
-            >
-
+            <label for="photo">Your photo <span>(optional, JPG / PNG / WebP / GIF, max 5 MB)</span></label>
+            <input type="file" id="photo" accept="image/jpeg,image/png,image/webp,image/gif">
         </div>
 
-
-        <button
-            class="primary"
-            onclick="addWish()"
-        >
+        <button class="primary" id="submitWishBtn" type="button" onclick="addWish()">
             Add My Page to the Book ✨
         </button>
 
-
-        <button
-            type="button"
-            class="delete-link"
-            onclick="openDeleteModal()"
-        >
-            🗑️ Delete my wish
+        <button type="button" class="delete-link"
+                onclick="closeM('modal'); openManage();">
+            ✏️ Edit or delete my wish
         </button>
-
     </div>
-
 </div>
 
 
-<!-- =========================
-     PERSONAL DELETE MODAL
-========================== -->
-
-<div
-    class="modal"
-    id="deleteModal"
->
-
+<!-- SUCCESS (shows the private code) -->
+<div class="modal" id="successModal" role="dialog" aria-modal="true" aria-labelledby="successTitle">
     <div class="modal-card">
 
-        <button
-            class="close"
-            onclick="closeDeleteModal()"
-        >
-            ×
-        </button>
+        <button class="close" type="button" aria-label="Close" onclick="closeM('successModal')">×</button>
 
-        <div class="chapter">
-            SITARE 30 • PERSONAL DELETE
-        </div>
+        <div class="chapter">SITARE 30 • YOUR PAGE</div>
 
-        <h2>
-            🗑️ Delete your page
-        </h2>
+        <h2 id="successTitle">Your wish is in ✨</h2>
 
-        <p>
-            Enter the private delete code you received
-            when you submitted your wish.
-        </p>
+        <p id="successText"></p>
 
-        <div class="field">
+        <p>Save this private code. You need it to edit or delete your wish from another device.</p>
 
-            <label>
-                Your private delete code
-            </label>
+        <div class="code-box" id="codeBox"></div>
 
-            <input
-                id="deleteCode"
-                type="text"
-                placeholder="Paste your delete code"
-            >
-
-        </div>
-
-        <button
-            class="primary"
-            onclick="deleteWish()"
-        >
-            Delete My Page
-        </button>
-
+        <button class="primary" type="button" onclick="copyCode()">Copy code</button>
     </div>
-
 </div>
 
 
-<!-- =========================
-     ADMIN LOGIN MODAL
-========================== -->
-
-<div
-    class="modal"
-    id="adminModal"
->
-
+<!-- EDIT / DELETE MY WISH -->
+<div class="modal" id="manageModal" role="dialog" aria-modal="true" aria-labelledby="manageTitle">
     <div class="modal-card">
 
-        <button
-            class="close"
-            onclick="closeAdminLogin()"
-        >
-            ×
-        </button>
+        <button class="close" type="button" aria-label="Close" onclick="closeM('manageModal')">×</button>
 
-        <div class="chapter">
-            SITARE 30 • ADMIN ACCESS
+        <div class="chapter">SITARE 30 • YOUR WISH</div>
+
+        <h2 id="manageTitle">✏️ Edit your page</h2>
+
+        <div id="manageStep1">
+            <p>Enter the private code you received when you submitted your wish.</p>
+
+            <div class="field">
+                <label for="manageCode">Your private code</label>
+                <input id="manageCode" type="text" placeholder="Paste your code" autocomplete="off">
+            </div>
+
+            <button class="primary" type="button" onclick="findMyWish()">Find my wish</button>
         </div>
 
-        <h2>
-            🔐 Admin Control
-        </h2>
+        <div id="manageStep2" hidden>
+            <p id="manageInfo"></p>
 
-        <p>
-            Enter the private admin code to enable
-            deletion controls for the archive.
-        </p>
+            <div class="field">
+                <label for="editName">Your name</label>
+                <input id="editName" maxlength="60">
+            </div>
 
-        <div class="field">
+            <div class="field">
+                <label for="editMessage">Your message</label>
+                <textarea id="editMessage" maxlength="1000"></textarea>
+            </div>
 
-            <label>
-                Admin code
-            </label>
+            <button class="primary" id="saveEditBtn" type="button" onclick="saveMyWish()">Save changes</button>
 
-            <input
-                id="adminCode"
-                type="password"
-                placeholder="Enter admin code"
-            >
-
+            <button class="delete-link" type="button" onclick="deleteMyWish()">
+                🗑️ Delete my wish permanently
+            </button>
         </div>
 
-        <button
-            class="primary"
-            onclick="loginAdmin()"
-        >
-            Unlock Admin Controls
-        </button>
-
+        <p class="manage-message" id="manageMessage" role="alert"></p>
     </div>
-
 </div>
 
-
-<!-- =========================
-     ADMIN DELETE MODAL
-========================== -->
-
-<div
-    class="modal"
-    id="adminDeleteModal"
->
-
-    <div class="modal-card">
-
-        <button
-            class="close"
-            onclick="closeAdminDeleteModal()"
-        >
-            ×
-        </button>
-
-        <div class="chapter">
-            SITARE 30 • ADMIN CONTROL
-        </div>
-
-        <h2>
-            🗑️ Delete this page?
-        </h2>
-
-        <p id="adminDeleteText">
-            This page will be permanently removed
-            from the birthday archive.
-        </p>
-
-        <button
-            class="danger-button"
-            onclick="confirmAdminDelete()"
-        >
-            Permanently Delete
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     JAVASCRIPT
-========================== -->
-
+<script src="config.js"></script>
 <script src="script.js"></script>
 
 </body>
-
 </html>
-
