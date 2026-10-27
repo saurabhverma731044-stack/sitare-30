@@ -1079,3 +1079,10 @@ body.admin-mode .admin-status {
     -webkit-text-fill-color: #777777 !important;
     opacity: 1 !important;
 }
+/* Birthday person's name - blue colour */
+#birthdayPerson,
+.birthday-person,
+.birthday-name {
+    color: #1d4ed8 !important;
+    -webkit-text-fill-color: #1d4ed8 !important;
+}
