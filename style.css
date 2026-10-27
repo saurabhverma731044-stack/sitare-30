@@ -51,7 +51,7 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-    outline: 3px solid rgba(57, 167, 255, .75);
+    outline: 3px solid rgba(181, 13, 13, 0.75);
     outline-offset: 3px;
 }
 
@@ -650,18 +650,25 @@ textarea:focus-visible {
     padding: 13px 14px;
     border-radius: 11px;
     border: 1px solid rgba(79,45,62,.2);
-    background: rgba(255,255,255,.72);
-    color: var(--ink);
+    background: #ffffff;
+    color: #2d2430;
     font: inherit;
     transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+    color: #8a7d89;
+    opacity: 1;
 }
 
 .field input:focus,
 .field textarea:focus {
     outline: none;
-    border-color: rgba(154,93,112,.8);
-    background: #fff;
-    box-shadow: 0 0 0 4px rgba(154,93,112,.11);
+    border-color: #398bdb;
+    background: #ffffff;
+    color: #2d2430;
+    box-shadow: 0 0 0 4px rgba(57,139,219,.15);
 }
 
 .field textarea {
