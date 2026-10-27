@@ -1056,3 +1056,26 @@ body.admin-mode .admin-status {
         scroll-behavior: auto !important;
     }
 }
+
+/* FIX: Make birthday wish form text visible */
+.field input,
+.field textarea,
+.field input:focus,
+.field textarea:focus,
+#name,
+#message,
+#editName,
+#editMessage {
+    color: #222222 !important;
+    -webkit-text-fill-color: #222222 !important;
+    background-color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+/* Placeholder text */
+.field input::placeholder,
+.field textarea::placeholder {
+    color: #777777 !important;
+    -webkit-text-fill-color: #777777 !important;
+    opacity: 1 !important;
+}
